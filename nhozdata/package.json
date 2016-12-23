@@ -1,0 +1,30 @@
+{
+  "name": "nhozdata",
+  "version": "1.0.0",
+  "description": "Manejo de datos de aplicacion nhoz.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zaragozamartin91/nhozapp.git"
+  },
+  "keywords": [
+    "nhoz",
+    "data",
+    "nhozapp",
+    "nodejs"
+  ],
+  "author": "zaragozamartin91@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zaragozamartin91/nhozapp/issues"
+  },
+  "homepage": "https://github.com/zaragozamartin91/nhozapp#readme",
+  "dependencies": {
+    "mysql": "github:mysqljs/mysql",
+    "read-dbf": "^1.1.0",
+    "stream-dbf": "^0.2.2"
+  }
+}
