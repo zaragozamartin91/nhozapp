@@ -32,7 +32,7 @@ connection.query(
     });
 
 connection.query(
-    'create table IF NOT EXISTS stock(provider_id ' + providerIdType + ', article_id ' + articleIdType + ', current int, ini int, foreign key (provider_id,article_id) references article (provider_id,id), primary key (provider_id,article_id))',
+    'create table IF NOT EXISTS stock(provider_id ' + providerIdType + ', article_id ' + articleIdType + ', current int default 0, ini int default 0, foreign key (provider_id,article_id) references article (provider_id,id), primary key (provider_id,article_id))',
     function (err, rows, fields) {
         if (err) {
             console.error("ERROR AL CREAR LA TABLA DE STOCK: " + err);
