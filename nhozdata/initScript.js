@@ -11,7 +11,7 @@ var connection = mysql.createConnection({
 connection.connect();
 
 connection.query(
-    `CREATE TABLE IF NOT EXISTS ${config.providerTableName} (id ${config.providerIdType}, name varchar(128), primary key (id))`,
+    `CREATE TABLE IF NOT EXISTS ${config.providerTableName} (id ${config.providerIdType}, name VARCHAR(128), PRIMARY KEY (id))`,
     function (err, rows, fields) {
         if (err) {
             console.error(err);
@@ -21,7 +21,7 @@ connection.query(
     });
 
 connection.query(
-    `CREATE TABLE IF NOT EXISTS ${config.articleTableName} (provider_id ${config.providerIdType}, id ${config.articleIdType}, description varchar(128), price decimal(10,2), foreign key (provider_id) references ${config.providerTableName}(id) ON DELETE CASCADE ON UPDATE CASCADE , primary key (provider_id,id))`,
+    `CREATE TABLE IF NOT EXISTS ${config.articleTableName} (provider_id ${config.providerIdType}, id ${config.articleIdType}, description VARCHAR(128), price DECIMAL(10,2) DEFAULT 0, FOREIGN KEY (provider_id) REFERENCES ${config.providerTableName}(id) ON DELETE CASCADE ON UPDATE CASCADE , PRIMARY KEY (provider_id,id))`,
     function (err, rows, fields) {
         if (err) {
             console.error("ERROR AL CREAR LA TABLA DE ARTICULOS: " + err);

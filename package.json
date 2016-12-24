@@ -1,20 +1,18 @@
 {
-  "name": "nhozdata",
+  "name": "nhozapp",
   "version": "1.0.0",
-  "description": "Manejo de datos de aplicacion nhoz.",
+  "description": "Aplicacion de alta y baja de stock para ferreteria y libreria.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zaragozamartin91/nhozapp.git"
+    "url": "git+https://github.com/zaragozamartin91/nhozapp.git"
   },
   "keywords": [
-    "nhoz",
-    "data",
-    "nhozapp",
-    "nodejs"
+    "nodejs",
+    "nhoz"
   ],
   "author": "zaragozamartin91@gmail.com",
   "license": "ISC",
@@ -23,8 +21,6 @@
   },
   "homepage": "https://github.com/zaragozamartin91/nhozapp#readme",
   "dependencies": {
-    "mysql": "github:mysqljs/mysql",
-    "read-dbf": "^1.1.0",
-    "stream-dbf": "^0.2.2"
+    "nimble": "0.0.2"
   }
 }

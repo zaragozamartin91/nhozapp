@@ -9,12 +9,13 @@ var pool = mysql.createPool({
 });
 
 /** Elimina un proveedor.
- * @param {Object} query datos de la query.
+ * @param {Object} queryData Datos de la query.
+ * @param {Function} callback Funcion a invocar al terminar.
  */
-module.exports.deleteProvider = function (query) {
-    var id = query.id;
-    var name = query.name;
-    var callback = query.callback || function () { };
+module.exports.deleteProvider = function (queryData, callback) {
+    var id = queryData.id;
+    var name = queryData.name;
+    var callback = callback || function () { };
 
     if (id) {
         pool.query(
@@ -25,34 +26,49 @@ module.exports.deleteProvider = function (query) {
             `DELETE FROM ${config.providerTableName} WHERE name="${name}"`,
             callback);
     } else {
-        pool.query(`DELETE FROM ${config.providerTableName}`, callback);
+        pool.query(
+            `DELETE FROM ${config.providerTableName}`, 
+            callback);
     }
 };
 
-module.exports.getProvider = function (query) {
-    var id = query.id;
-    var name = query.name;
-    var callback = query.callback || function () { };
+/** Obtiene proveedores.
+ * @param {Object} queryData Datos de los proveedores a eliminar.
+ * @param {Function} callback Funcion a invocar cuando se obtengan los proveedores.
+ */
+module.exports.getProvider = function (queryData, callback) {
+    var id = queryData.id;
+    var name = queryData.name;
+    var callback = callback || function () { };
 
     if (id) {
-        pool.query(`SELECT * FROM ${config.providerTableName} WHERE id="${id}"`,
+        pool.query(
+            `SELECT * FROM ${config.providerTableName} WHERE id="${id}"`,
             callback);
     } else if (name) {
-        pool.query(`SELECT * FROM ${config.providerTableName} WHERE name="${name}"`,
+        pool.query(
+            `SELECT * FROM ${config.providerTableName} WHERE name="${name}"`,
             callback);
     } else {
-        pool.query(`SELECT * FROM ${config.providerTableName}`,
+        pool.query(
+            `SELECT * FROM ${config.providerTableName}`,
             callback);
     }
 };
 
-module.exports.addProvider = function (query) {
-    var id = query.id;
-    var name = query.name || `Proveedor ${id}`;
-    var callback = query.callback || function () { };
+/** Agrega un proveedor.
+ * @param {Object} queryData Datos del proveedor a agregar.
+ * @param {Function} callback Funcion a invocar despues de agregar el proveedor.
+ */
+module.exports.addProvider = function (queryData, callback) {
+    var id = queryData.id;
+    var name = queryData.name || `Proveedor ${id}`;
+    var callback = callback || function () { };
 
     if (id) {
-        pool.query(`INSERT INTO ${config.providerTableName} VALUES ('${id}','${name}')`, callback);
+        pool.query(
+            `INSERT INTO ${config.providerTableName} VALUES ('${id}','${name}')`,
+            callback);
     } else {
         var msg = 'NO SE INGRESO UN ID DE PROVEEDOR';
         console.error(msg);
@@ -60,12 +76,16 @@ module.exports.addProvider = function (query) {
     }
 };
 
-module.exports.addArticle = function (query) {
-    var providerId = query.providerId;
-    var id = query.id;
-    var description = query.description || `Articulo ${id} de proveedor ${providerId}`;
-    var price = query.price;
-    var callback = query.callback || function () { };
+/** Se agrega un articulo.
+ * @param {Object} queryData Datos del articulo a agregar.
+ * @param {Function} callback Funcion a invocar luego de agregar el articulo.
+ */
+module.exports.addArticle = function (queryData, callback) {
+    var providerId = queryData.providerId;
+    var id = queryData.id;
+    var description = queryData.description || `Articulo ${id} de proveedor ${providerId}`;
+    var price = queryData.price;
+    var callback = callback || function () { };
 
     pool.query(
         `INSERT INTO ${config.articleTableName} VALUES ("${providerId}","${id}","${description}","${price}")`,
@@ -73,53 +93,11 @@ module.exports.addArticle = function (query) {
 };
 
 module.exports.endPool = function () {
-    pool.end(function (err) {
+    pool.end(err => {
         if (err) {
             console.error("OCURRIO UN ERROR AL CERRAR EL POOL DE CONEXIONES: " + err);
+        } else {
+            console.log("POOL DE CONEXIONES CERRADO");
         }
     });
 };
-
-var flow = require('nimble');
-
-flow.series([
-    function (callback) {
-        module.exports.deleteProvider({
-            callback: callback
-        });
-    },
-
-    function (callback) {
-        module.exports.addProvider({
-            id: "123",
-            name: "MIGLUZ",
-            callback: callback
-        });
-    },
-
-    function (callback) {
-        module.exports.addProvider({
-            id: "345",
-            name: "PLAVICON",
-            callback: callback
-        });
-    },
-
-    function (callback) {
-        module.exports.getProvider({
-            callback: (err, rows) => {
-                console.log("PROVEEDORES: ");
-                console.log(rows);
-                callback(err, rows);
-            }
-        });
-    },
-
-    function (callback) {
-        pool.end(err => {
-            if (err) console.error(`ERROR AL CERRAR POOL: ${err}`)
-            else console.log("POOL CERRADO");
-            callback();
-        })
-    }
-]);
