@@ -21,7 +21,7 @@ connection.query(
     });
 
 connection.query(
-    `CREATE TABLE IF NOT EXISTS ${config.articleTableName} (provider_id ${config.providerIdType}, id ${config.articleIdType}, description VARCHAR(128), price DECIMAL(10,2) DEFAULT 0, FOREIGN KEY (provider_id) REFERENCES ${config.providerTableName}(id) ON DELETE CASCADE ON UPDATE CASCADE , PRIMARY KEY (provider_id,id))`,
+    `CREATE TABLE IF NOT EXISTS ${config.articleTableName} (provider_id ${config.providerIdType}, id ${config.articleIdType}, description VARCHAR(128), price DECIMAL(10,2) DEFAULT 0, currStock INT DEFAULT 0, iniStock INT DEFAULT 0, FOREIGN KEY (provider_id) REFERENCES ${config.providerTableName}(id) ON DELETE CASCADE ON UPDATE CASCADE , PRIMARY KEY (provider_id,id))`,
     function (err, rows, fields) {
         if (err) {
             console.error("ERROR AL CREAR LA TABLA DE ARTICULOS: " + err);
@@ -30,18 +30,6 @@ connection.query(
         }
     });
 
-connection.query(
-    `CREATE TABLE IF NOT EXISTS ${config.stockTableName} (provider_id ${config.providerIdType}, article_id ${config.articleIdType}, current int default 0, ini int default 0, foreign key (provider_id,article_id) references ${config.articleTableName} (provider_id,id) ON DELETE CASCADE ON UPDATE CASCADE, primary key (provider_id,article_id))`
-        .replace('%TABLE_NAME%', config.stockTableName)
-        .replace('%PROVIDER_ID_TYPE%', config.providerIdType)
-        .replace('%ARTICLE_ID_TYPE%', config.articleIdType),
-    function (err, rows, fields) {
-        if (err) {
-            console.error("ERROR AL CREAR LA TABLA DE STOCK: " + err);
-        } else {
-            console.log("TABLA DE STOCK OK!");
-        }
-    });
 
 connection.end(function (err) {
     if (err) console.error("Error al cerrar la conexion: " + err);

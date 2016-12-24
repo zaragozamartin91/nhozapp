@@ -26,10 +26,19 @@ module.exports.deleteProvider = function (queryData, callback) {
             `DELETE FROM ${config.providerTableName} WHERE name="${name}"`,
             callback);
     } else {
-        pool.query(
-            `DELETE FROM ${config.providerTableName}`, 
-            callback);
+        var msg = "NO SE INDICARON DATOS SUFICIENTES PARA ELIMINAR AL PROVEEDOR";
+        console.error(msg);
+        callback({ msg });
     }
+};
+
+/** Elimina todos los proveedores.
+ * @param {Function} callback Funcion a llamar luego de eliminar a los proveedores.
+ */
+module.exports.deleteAllProviders = function (callback) {
+    pool.query(
+        `DELETE FROM ${config.providerTableName}`,
+        callback);
 };
 
 /** Obtiene proveedores.
@@ -83,13 +92,53 @@ module.exports.addProvider = function (queryData, callback) {
 module.exports.addArticle = function (queryData, callback) {
     var providerId = queryData.providerId;
     var id = queryData.id;
-    var description = queryData.description || `Articulo ${id} de proveedor ${providerId}`;
-    var price = queryData.price;
+    if (providerId) {
+        if (id) {
+            var description = queryData.description || `Articulo ${id} de proveedor ${providerId}`;
+            var price = queryData.price || 0.0;
+            var currStock = queryData.currStock || 0;
+            var iniStock = queryData.iniStock || 0;
+            var callback = callback || function () { };
+
+            pool.query(
+                `INSERT INTO ${config.articleTableName} VALUES ("${providerId}","${id}","${description}","${price}",${currStock},${iniStock})`,
+                callback);
+        } else {
+            var msg = "NO SE INDICO ID DE ARTICULO";
+            console.error(msg);
+            callback({ msg: msg });
+        }
+    } else {
+        var msg = "NO SE INDICO ID DE PROVEEDOR";
+        console.error(msg);
+        callback({ msg: msg });
+    }
+};
+
+/** Elimina articulos.
+ * @param {Object} queryData Datos del articulo a eliminar.
+ * @param {Function} callback Funcion a invocar cuando termine la eliminacion.
+ */
+module.exports.deleteArticle = function (queryData, callback) {
+    var providerId = queryData.providerId;
+    var articleId = queryData.articleId;
     var callback = callback || function () { };
 
-    pool.query(
-        `INSERT INTO ${config.articleTableName} VALUES ("${providerId}","${id}","${description}","${price}")`,
-        callback);
+    if (providerId) {
+        if (articleId) {
+            pool.query(
+                `DELETE FROM ${config.articleTableName} WHERE provider_id="${providerId}" AND id="${articleId}"`,
+                callback);
+        } else {
+            pool.query(
+                `DELETE FROM ${config.articleTableName} WHERE provider_id="${providerId}"`,
+                callback);
+        }
+    } else {
+        var msg = "NO SE INGRESO UN ID DE PROVEEDOR DEL ARTICULO";
+        console.error(msg);
+        callback({ msg });
+    }
 };
 
 module.exports.endPool = function () {

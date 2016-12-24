@@ -3,7 +3,7 @@ var flow = require('nimble');
 
 flow.series([
     function (callback) {
-        nhozdata.deleteProvider({}, callback);
+        nhozdata.deleteAllProviders(callback);
     },
 
     function (callback) {
