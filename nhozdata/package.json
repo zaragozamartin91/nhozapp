@@ -24,6 +24,7 @@
   "homepage": "https://github.com/zaragozamartin91/nhozapp#readme",
   "dependencies": {
     "mysql": "github:mysqljs/mysql",
+    "nimble": "0.0.2",
     "read-dbf": "^1.1.0",
     "stream-dbf": "^0.2.2"
   }
