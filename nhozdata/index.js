@@ -8,143 +8,68 @@ var pool = mysql.createPool({
     database: config.database
 });
 
+/** Elimina un proveedor.
+ * @param {Object} query datos de la query.
+ */
 module.exports.deleteProvider = function (query) {
     var id = query.id;
     var name = query.name;
-    var succCallback = query.succCallback;
-    var errCallback = query.errCallback;
-
-    errCallback = errCallback || function () { };
-    succCallback = succCallback || function () { };
+    var callback = query.callback || function () { };
 
     if (id) {
-        pool.query(`DELETE FROM ${config.providerTableName} WHERE id="${id}"`,
-            function (err, rows) {
-                if (err) {
-                    console.error(`OCURRIO UN ERROR AL ELIMINAR EL PROVEDOR ${id}: ${err}`);
-                    errCallback(err);
-                } else {
-                    console.log(`PROVEEDOR ${id} ELIMINADO`);
-                    succCallback(rows);
-                }
-            });
+        pool.query(
+            `DELETE FROM ${config.providerTableName} WHERE id="${id}"`,
+            callback);
     } else if (name) {
-        pool.query(`DELETE FROM ${config.providerTableName} WHERE name="${name}"`,
-            function (err, rows) {
-                if (err) {
-                    console.error(`OCURRIO UN ERROR AL ELIMINAR LOS PROVEEDORES ${name}: ${err}`);
-                    errCallback(err);
-                } else {
-                    console.log(`PROVEEDORES ${name} ELIMINADOS`);
-                    succCallback(rows);
-                }
-            });
+        pool.query(
+            `DELETE FROM ${config.providerTableName} WHERE name="${name}"`,
+            callback);
     } else {
-        pool.query(`DELETE FROM ${config.providerTableName}`,
-            function (err, rows) {
-                if (err) {
-                    console.error(`OCURRIO UN ERROR AL ELIMINAR LOS PROVEEDORES: ${err}`);
-                    errCallback(err);
-                } else {
-                    console.log(`PROVEEDORES ELIMINADOS`);
-                    succCallback(rows);
-                }
-            });
+        pool.query(`DELETE FROM ${config.providerTableName}`, callback);
     }
 };
 
 module.exports.getProvider = function (query) {
     var id = query.id;
     var name = query.name;
-    var succCallback = query.succCallback;
-    var errCallback = query.errCallback;
-
-    errCallback = errCallback || function () { };
-    succCallback = succCallback || function () { };
+    var callback = query.callback || function () { };
 
     if (id) {
         pool.query(`SELECT * FROM ${config.providerTableName} WHERE id="${id}"`,
-            function (err, rows) {
-                if (err) {
-                    console.error(`ERROR AL OBTENER EL PROVEEDOR ${id}`);
-                    errCallback(err);
-                } else {
-                    succCallback(rows);
-                }
-            });
+            callback);
     } else if (name) {
         pool.query(`SELECT * FROM ${config.providerTableName} WHERE name="${name}"`,
-            function (err, rows) {
-                if (err) {
-                    console.error(`ERROR AL OBTENER EL PROVEEDORES ${name}`);
-                    errCallback(err);
-                } else {
-                    succCallback(rows);
-                }
-            });
+            callback);
     } else {
         pool.query(`SELECT * FROM ${config.providerTableName}`,
-            function (err, rows) {
-                if (err) {
-                    console.error(`ERROR AL OBTENER LOS PROVEEDORES`);
-                    errCallback(err);
-                } else {
-                    succCallback(rows);
-                }
-            });
+            callback);
     }
 };
 
 module.exports.addProvider = function (query) {
     var id = query.id;
-    var name = query.name;
-    var succCallback = query.succCallback;
-    var errCallback = query.errCallback;
-
-    errCallback = errCallback || function () { };
-    succCallback = succCallback || function () { };
+    var name = query.name || `Proveedor ${id}`;
+    var callback = query.callback || function () { };
 
     if (id) {
-        name = name || `Proveedor ${id}`;
-
-        // Use the connection
-        pool.query(`INSERT INTO ${config.providerTableName} VALUES ('${id}','${name}')`,
-            function (err, rows) {
-                if (err) {
-                    console.error('OCURRIO UN ERROR AL AGREGAR UN PROVEEDOR: ' + err);
-                    errCallback(err);
-                } else {
-                    console.log(`PROVEEDOR ${id}::${name} AGREGADO`);
-                    succCallback();
-                }
-            });
+        pool.query(`INSERT INTO ${config.providerTableName} VALUES ('${id}','${name}')`, callback);
     } else {
-        console.error('NO SE INGRESO UN ID DE PROVEEDOR');
+        var msg = 'NO SE INGRESO UN ID DE PROVEEDOR';
+        console.error(msg);
+        callback({ msg: msg });
     }
 };
 
 module.exports.addArticle = function (query) {
     var providerId = query.providerId;
     var id = query.id;
-    var description = query.description;
+    var description = query.description || `Articulo ${id} de proveedor ${providerId}`;
     var price = query.price;
-    var succCallback = query.succCallback;
-    var errCallback = query.errCallback;
+    var callback = query.callback || function () { };
 
-    errCallback = errCallback || function () { };
-    succCallback = succCallback || function () { };
-    description = description || `Articulo ${id} de proveedor ${providerId}`;
-
-    pool.query(`INSERT INTO ${config.articleTableName} VALUES ("${providerId}","${id}","${description}","${price}")`,
-        function (err) {
-            if (err) {
-                console.error(`OCURRIO UN ERROR AL INGRESAR EL ARTICULO ${id} DEL PROVEEDOR ${providerId}: ${err}`);
-                errCallback(err);
-            } else {
-                console.log(`ARTICULO ${providerId}::${id} AGREGADO!`);
-                succCallback();
-            }
-        });
+    pool.query(
+        `INSERT INTO ${config.articleTableName} VALUES ("${providerId}","${id}","${description}","${price}")`,
+        callback);
 };
 
 module.exports.endPool = function () {
@@ -160,10 +85,7 @@ var flow = require('nimble');
 flow.series([
     function (callback) {
         module.exports.deleteProvider({
-            succCallback: function (rows) {
-                callback(null, rows);
-            },
-            errCallback: callback
+            callback: callback
         });
     },
 
@@ -171,9 +93,7 @@ flow.series([
         module.exports.addProvider({
             id: "123",
             name: "MIGLUZ",
-            succCallback: function (rows) {
-                callback(null, rows);
-            }
+            callback: callback
         });
     },
 
@@ -181,25 +101,22 @@ flow.series([
         module.exports.addProvider({
             id: "345",
             name: "PLAVICON",
-            succCallback: function (rows) {
-                callback(null, rows);
-            }
+            callback: callback
         });
     },
 
     function (callback) {
         module.exports.getProvider({
-            succCallback: function (rows) {
-                console.log(`PROVEEDORES:`);
+            callback: (err, rows) => {
+                console.log("PROVEEDORES: ");
                 console.log(rows);
-                callback();
-            },
-            errCallback: callback
+                callback(err, rows);
+            }
         });
     },
 
     function (callback) {
-        pool.end(function (err) {
+        pool.end(err => {
             if (err) console.error(`ERROR AL CERRAR POOL: ${err}`)
             else console.log("POOL CERRADO");
             callback();
