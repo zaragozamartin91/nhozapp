@@ -22,7 +22,7 @@ flow.series([
 
     function (callback) {
         nhozdata.getProvider({},
-            (err, rows) => {
+            function (err, rows) {
                 console.log("PROVEEDORES: ");
                 console.log(rows);
                 callback(err, rows);

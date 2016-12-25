@@ -30,6 +30,15 @@ connection.query(
         }
     });
 
+connection.query(
+    `CREATE TABLE IF NOT EXISTS ${config.clientTableName} (id ${config.clientIdType}, name VARCHAR(64))`,
+    function (err, rows, fields) {
+        if (err) {
+            console.error("ERROR AL CREAR LA TABLA DE CLIENTES");
+        } else {
+            console.log("TABLA DE CLIENTES OK!");
+        }
+    });
 
 connection.end(function (err) {
     if (err) console.error("Error al cerrar la conexion: " + err);

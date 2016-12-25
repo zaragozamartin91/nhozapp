@@ -9,5 +9,6 @@ module.exports.providerIdType = 'varchar(64)';
 module.exports.articleTableName = 'article';
 module.exports.articleIdType = 'varchar(64)';
 
-module.exports.stockTableName = 'stock';
-module.exports.stockIdType = 'varchar(64)';
+/* El id de un cliente puede corresponder a su DNI o CUIL/CUIT */
+module.exports.clientTableName = 'clients';
+module.exports.clientIdType = 'varchar(64)';

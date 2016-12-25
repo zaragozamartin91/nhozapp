@@ -142,7 +142,7 @@ module.exports.deleteArticle = function (queryData, callback) {
 };
 
 module.exports.endPool = function () {
-    pool.end(err => {
+    pool.end(function (err) {
         if (err) {
             console.error("OCURRIO UN ERROR AL CERRAR EL POOL DE CONEXIONES: " + err);
         } else {
