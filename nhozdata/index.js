@@ -1,12 +1,17 @@
 var config = require('./config');
 
 var mysql = require('mysql');
-var pool = mysql.createPool({
-    host: config.host,
-    user: config.user,
-    password: config.password,
-    database: config.database
-});
+
+var pool;
+
+module.exports.createPool = function () {
+    pool = mysql.createPool({
+        host: config.host,
+        user: config.user,
+        password: config.password,
+        database: config.database
+    });
+};
 
 /** Elimina un proveedor.
  * @param {Object} queryData Datos de la query.

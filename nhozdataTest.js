@@ -1,23 +1,54 @@
 var nhozdata = require('./nhozdata');
 var flow = require('nimble');
 
+var nhozdata2 = require('./nhozdata');
+
 flow.series([
     function (callback) {
-        nhozdata.deleteAllProviders(callback);
+        nhozdata.createPool();
+        callback();
     },
 
     function (callback) {
-        nhozdata.addProvider({
+        nhozdata.deleteAllProviders(function (err) {
+            if (err) {
+                console.error("ERROR AL ELIMINAR A LOS PROVEEDORES");
+                console.error(err);
+            } else {
+                console.log("PROVEEDORES ELIMINADOS");
+            }
+            callback(err);
+        });
+    },
+
+    function (callback) {
+        var provider = {
             id: "123",
             name: "MIGLUZ",
-        }, callback);
+        }
+        nhozdata2.addProvider(provider, function (err) {
+            if (err) {
+                console.error(`ERROR AL AGREGAR A ${provider.id}`);
+            } else {
+                console.log(`PROVEEDOR ${provider.id} AGREGADO`);
+            }
+            callback(err);
+        });
     },
 
     function (callback) {
-        nhozdata.addProvider({
-            id: "345",
+        var provider = {
+            id: "456",
             name: "PLAVICON",
-        }, callback);
+        }
+        nhozdata2.addProvider(provider, function (err) {
+            if (err) {
+                console.error(`ERROR AL AGREGAR A ${provider.id}`);
+            } else {
+                console.log(`PROVEEDOR ${provider.id} AGREGADO`);
+            }
+            callback(err);
+        });
     },
 
     function (callback) {
