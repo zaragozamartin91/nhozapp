@@ -4,10 +4,6 @@ var flow = require('nimble');
 var nhozdata2 = require('./nhozdata');
 
 flow.series([
-    function (callback) {
-        nhozdata.createPool();
-        callback();
-    },
 
     function (callback) {
         nhozdata.deleteAllProviders(function (err) {
@@ -61,7 +57,7 @@ flow.series([
     },
 
     function (callback) {
-        nhozdata.endPool();
+        nhozdata.endConnection();
         callback();
-    }
+    },
 ]);

@@ -2,16 +2,14 @@ var config = require('./config');
 
 var mysql = require('mysql');
 
-var pool;
+var db = mysql.createConnection({
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    database: config.database
+});
 
-module.exports.createPool = function () {
-    pool = mysql.createPool({
-        host: config.host,
-        user: config.user,
-        password: config.password,
-        database: config.database
-    });
-};
+/* A connection can also be implicitly established by invoking a query */ 
 
 /** Elimina un proveedor.
  * @param {Object} queryData Datos de la query.
@@ -23,11 +21,11 @@ module.exports.deleteProvider = function (queryData, callback) {
     var callback = callback || function () { };
 
     if (id) {
-        pool.query(
+        db.query(
             `DELETE FROM ${config.providerTableName} WHERE id="${id}"`,
             callback);
     } else if (name) {
-        pool.query(
+        db.query(
             `DELETE FROM ${config.providerTableName} WHERE name="${name}"`,
             callback);
     } else {
@@ -41,7 +39,7 @@ module.exports.deleteProvider = function (queryData, callback) {
  * @param {Function} callback Funcion a llamar luego de eliminar a los proveedores.
  */
 module.exports.deleteAllProviders = function (callback) {
-    pool.query(
+    db.query(
         `DELETE FROM ${config.providerTableName}`,
         callback);
 };
@@ -56,15 +54,15 @@ module.exports.getProvider = function (queryData, callback) {
     var callback = callback || function () { };
 
     if (id) {
-        pool.query(
+        db.query(
             `SELECT * FROM ${config.providerTableName} WHERE id="${id}"`,
             callback);
     } else if (name) {
-        pool.query(
+        db.query(
             `SELECT * FROM ${config.providerTableName} WHERE name="${name}"`,
             callback);
     } else {
-        pool.query(
+        db.query(
             `SELECT * FROM ${config.providerTableName}`,
             callback);
     }
@@ -80,7 +78,7 @@ module.exports.addProvider = function (queryData, callback) {
     var callback = callback || function () { };
 
     if (id) {
-        pool.query(
+        db.query(
             `INSERT INTO ${config.providerTableName} VALUES ('${id}','${name}')`,
             callback);
     } else {
@@ -105,7 +103,7 @@ module.exports.addArticle = function (queryData, callback) {
             var iniStock = queryData.iniStock || 0;
             var callback = callback || function () { };
 
-            pool.query(
+            db.query(
                 `INSERT INTO ${config.articleTableName} VALUES ("${providerId}","${id}","${description}","${price}",${currStock},${iniStock})`,
                 callback);
         } else {
@@ -131,11 +129,11 @@ module.exports.deleteArticle = function (queryData, callback) {
 
     if (providerId) {
         if (articleId) {
-            pool.query(
+            db.query(
                 `DELETE FROM ${config.articleTableName} WHERE provider_id="${providerId}" AND id="${articleId}"`,
                 callback);
         } else {
-            pool.query(
+            db.query(
                 `DELETE FROM ${config.articleTableName} WHERE provider_id="${providerId}"`,
                 callback);
         }
@@ -146,12 +144,13 @@ module.exports.deleteArticle = function (queryData, callback) {
     }
 };
 
-module.exports.endPool = function () {
-    pool.end(function (err) {
+module.exports.endConnection = function () {
+    /** Terminating a connection gracefully is done by calling the end() method */
+    db.end(function (err) {
         if (err) {
-            console.error("OCURRIO UN ERROR AL CERRAR EL POOL DE CONEXIONES: " + err);
+            console.error("OCURRIO UN ERROR AL CERRAR CONEXION CON BBDD: " + err);
         } else {
-            console.log("POOL DE CONEXIONES CERRADO");
+            console.log("CONEXION CON BBDD CERRADA");
         }
     });
 };
