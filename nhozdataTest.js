@@ -55,9 +55,4 @@ flow.series([
                 callback(err, rows);
             });
     },
-
-    function (callback) {
-        nhozdata.endConnection();
-        callback();
-    },
 ]);
