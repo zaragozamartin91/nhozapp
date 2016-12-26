@@ -2,9 +2,9 @@ var config = require('./config');
 var mysql = require('mysql');
 
 /** Realiza una query en la BBDD.
- * @param {Function} queryAction Accion a realizar. Recibe como parametro un objeto tipo conexion listo para usar.
+ * @param {Function} queryActions Acciones/Queries a realizar. Funciones que reciben como parametro un objeto tipo conexion listo para usar.
  */
-function doQuery(queryAction) {
+function doQuery(queryActions) {
     var connection = mysql.createConnection({
         host: config.host,
         user: config.user,
@@ -15,7 +15,8 @@ function doQuery(queryAction) {
         if (err) {
             console.error("ERROR AL OBTENER CONEXION CON BBDD");
         } else {
-            queryAction(connection);
+            if (queryActions.forEach) queryActions.forEach(function (queryAction) { queryAction(connection); });
+            else queryActions(connection);
             connection.end();
         }
     });
