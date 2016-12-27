@@ -23,7 +23,22 @@
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
                 mdl-layout--fixed-header">
       
-      <% include layout_header %>
+      <!-- ENCABEZADO DE BUSQUEDA -->
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+            <label class="mdl-button mdl-js-button mdl-button--icon" for="search-input">
+              <img src="images/ic_search_white_24px.svg" alt="Search">
+            </label>
+            <div class="mdl-textfield__expandable-holder">
+              <form action="/providers" id="search-form" method="get">
+                <input class="mdl-textfield__input" type="text" name="id" id="search-input">
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
 
       <% include drawer_menu %>
 
@@ -54,5 +69,6 @@
       </main>
     </div>
 
+    <script src="javascripts/providers.js" />
   </body>
 </html>

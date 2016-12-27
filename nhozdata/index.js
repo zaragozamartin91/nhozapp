@@ -88,6 +88,34 @@ module.exports.getProvider = function (queryData, callback) {
     });
 };
 
+/** Obtiene proveedores.
+ * @param {Object} queryData Datos de los proveedores a eliminar.
+ * @param {Function} callback Funcion a invocar cuando se obtengan los proveedores.
+ */
+module.exports.getProviderLike = function (queryData, callback) {
+    queryData = queryData || {};
+
+    var id = queryData.id;
+    var name = queryData.name;
+    var callback = callback || function () { };
+
+    doQuery(function (db) {
+        if (id) {
+            db.query(
+                `SELECT * FROM ${config.providerTableName} WHERE id LIKE "%${id}%"`,
+                callback);
+        } else if (name) {
+            db.query(
+                `SELECT * FROM ${config.providerTableName} WHERE name LIKE "%${name}%"`,
+                callback);
+        } else {
+            db.query(
+                `SELECT * FROM ${config.providerTableName}`,
+                callback);
+        }
+    });
+};
+
 /** Agrega un proveedor.
  * @param {Object} queryData Datos del proveedor a agregar.
  * @param {Function} callback Funcion a invocar despues de agregar el proveedor.
