@@ -3,16 +3,7 @@
   <head>
     <title><%= title %></title>
 
-    <% include mdlite_imports.ejs %>
-
-    <style>
-      .page-content {
-        padding: 10px;
-      }
-      table {
-        width: 100%;
-      }
-    </style>
+    <% include head %>
 
   </head>
   <body>
@@ -44,10 +35,32 @@
 
       <main class="mdl-layout__content">
         <div class="page-content">
+
         
             <h1><%=title %></h1>
+
+            <!-- Simple Textfield -->
+            <form action="#" id="add-provider-form">
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="add-provider-id">
+                <label class="mdl-textfield__label" for="provider-id">ID</label>
+              </div>
+
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="add-provider-name">
+                <label class="mdl-textfield__label" for="add-provider-name">Nombre</label>
+              </div>
+
+              <!-- Accent-colored raised button with ripple -->
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="add-provider-button">
+                Agregar
+              </button>
+            </form>
+
+
+
             <% if(providers) { %>
-              <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+              <table id="providers-table" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                 <thead>
                   <tr>
                     <th class="mdl-data-table__cell--non-numeric">ID</th>
@@ -62,6 +75,8 @@
                   <td class="mdl-data-table__cell--non-numeric"><%=provider.name %></td>
                 </tr>
               <% } ); %>
+            <% } else { %>
+              <h2>No tienes proveedores</h2>
             <% } %>
 
             

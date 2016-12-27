@@ -48,6 +48,36 @@ flow.series([
     },
 
     function (callback) {
+        var provider = {
+            id: "112",
+            name: "PARKER",
+        }
+        nhozdata2.addProvider(provider, function (err) {
+            if (err) {
+                console.error(`ERROR AL AGREGAR A ${provider.id}`);
+            } else {
+                console.log(`PROVEEDOR ${provider.id} AGREGADO`);
+            }
+            callback(err);
+        });
+    },
+
+    function (callback) {
+        var provider = {
+            id: "489",
+            name: "PARKER",
+        }
+        nhozdata2.addProvider(provider, function (err) {
+            if (err) {
+                console.error(`ERROR AL AGREGAR A ${provider.id}`);
+            } else {
+                console.log(`PROVEEDOR ${provider.id} AGREGADO`);
+            }
+            callback(err);
+        });
+    },
+
+    function (callback) {
         nhozdata.getProvider({},
             function (err, rows) {
                 console.log("PROVEEDORES: ");
