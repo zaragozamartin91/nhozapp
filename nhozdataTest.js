@@ -85,4 +85,11 @@ flow.series([
                 callback(err, rows);
             });
     },
+
+    function (callback) {
+        nhozdata.providerExists({ id: "asdasd" }, function (err, exists) {
+            console.log(`exists: ${exists}`);
+            callback();
+        });
+    },
 ]);

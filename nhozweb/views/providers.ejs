@@ -38,8 +38,12 @@
         
             <h1><%=title %></h1>
 
-            <% if(err) { %>
-              <span style="color:red;"><%= err %></span>
+            <% if(msg.err) { %>
+              <span style="color:red;"><%= msg.err %></span>
+            <% } %>
+
+            <% if(msg.succ) { %>
+              <span style="color:green;"><%= msg.succ %></span>
             <% } %>
 
             <!-- Simple Textfield -->

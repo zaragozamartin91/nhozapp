@@ -9,23 +9,51 @@ router.get('/', function (req, res, next) {
 
 router.get('/providers', function (req, res, next) {
   var provId = req.query.id;
-  var error = req.query.err;
+  var msg = {
+    err: req.query.err,
+    succ: req.query.succ
+  }
 
   data.getProviderLike({ id: provId }, function (err, rows) {
     res.render('providers', {
       title: 'Proveedores',
       providers: rows,
-      err: error
+      msg: msg,
     });
   });
 });
 
 /* SIGUIENDO ESQUEMA POST/REDIRECT/GET https://es.wikipedia.org/wiki/Post/Redirect/Get  */
 router.post('/providers/add', function (req, res, next) {
-  console.log(req.body);
-  /* Necesario para enviar un error mediante la url. */
-  var err = encodeURIComponent("Error al agregar proveedor");
-  res.redirect(`/providers?err=${err}`);
+  var providerId = req.body.id;
+  if (providerId) {
+    var providerName = req.body.name || `Proveedor ${providerId}`;
+
+    data.providerExists({ id: providerId }, function (err, exists) {
+      if (err) {
+        console.error(`Error al verificar proveedores ${err}`);
+        var error = encodeURIComponent("Error al verificar proveedores");
+        res.redirect(`/providers?err=${error}`);
+      } else if (exists) {
+        var error = encodeURIComponent(`Proveedor ${providerId} ya existe!`);
+        res.redirect(`/providers?err=${error}`);
+      } else {
+        data.addProvider({ id: providerId, name: providerName }, function (err) {
+          if (err) {
+            console.error(`Error al agregar proveedor ${providerId}: ${err}`);
+            var error = encodeURIComponent(`Error al agregar proveedor ${providerId}`);
+            res.redirect(`/providers?err=${error}`);
+          } else {
+            var succ = encodeURIComponent(`Proveedor ${providerId} agregado`);
+            res.redirect(`/providers?succ=${succ}`);
+          }
+        });
+      }
+    });
+  } else {
+    var error = encodeURIComponent("No se ingreso un id de proveedor!");
+    res.redirect(`/providers?err=${error}`);
+  }
 });
 
 

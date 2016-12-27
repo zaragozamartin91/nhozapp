@@ -60,6 +60,7 @@ module.exports.deleteAllProviders = function (callback) {
     });
 };
 
+
 /** Obtiene proveedores.
  * @param {Object} queryData Datos de los proveedores a eliminar.
  * @param {Function} callback Funcion a invocar cuando se obtengan los proveedores.
@@ -85,6 +86,16 @@ module.exports.getProvider = function (queryData, callback) {
                 `SELECT * FROM ${config.providerTableName}`,
                 callback);
         }
+    });
+};
+
+module.exports.providerExists = function (queryData, callback) {
+    module.exports.getProvider(queryData, function (err, rows) {
+        var exists = false;
+        if (rows) {
+            exists = rows.length > 0;
+        }
+        callback(err, exists);
     });
 };
 
