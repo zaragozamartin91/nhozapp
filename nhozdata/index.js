@@ -14,11 +14,11 @@ function doQuery(queryActions) {
     connection.connect(function (err) {
         if (err) {
             console.error("ERROR AL OBTENER CONEXION CON BBDD");
-        } else {
-            if (queryActions.forEach) queryActions.forEach(function (queryAction) { queryAction(connection); });
-            else queryActions(connection);
-            connection.end();
         }
+        if (queryActions.forEach) queryActions.forEach(function (queryAction) { queryAction(connection); });
+        else queryActions(connection);
+
+        connection.end();
     });
 }
 exports.doQuery = doQuery;
@@ -65,6 +65,8 @@ module.exports.deleteAllProviders = function (callback) {
  * @param {Function} callback Funcion a invocar cuando se obtengan los proveedores.
  */
 module.exports.getProvider = function (queryData, callback) {
+    queryData = queryData || {};
+
     var id = queryData.id;
     var name = queryData.name;
     var callback = callback || function () { };

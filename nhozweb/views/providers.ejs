@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+
+    <% include mdlite_imports.ejs %>
+
+    <style>
+      .page-content {
+        padding: 10px;
+      }
+      table {
+        width: 100%;
+      }
+    </style>
+
+  </head>
+  <body>
+
+
+    <!-- The drawer is always open in large screens. The header is always shown,
+      even in small screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+                mdl-layout--fixed-header">
+      
+      <% include layout_header %>
+
+      <% include drawer_menu %>
+
+      <main class="mdl-layout__content">
+        <div class="page-content">
+            <h1><%=title %></h1>
+            <% if(providers) { %>
+              <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+                <thead>
+                  <tr>
+                    <th class="mdl-data-table__cell--non-numeric">ID</th>
+                    <th class="mdl-data-table__cell--non-numeric">Nombre</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+              <% providers.forEach( function(provider) { %>
+                <tr>
+                  <td class="mdl-data-table__cell--non-numeric"><%=provider.id %></td>
+                  <td class="mdl-data-table__cell--non-numeric"><%=provider.name %></td>
+                </tr>
+              <% } ); %>
+            <% } %>
+
+            
+        </div>
+      </main>
+    </div>
+
+  </body>
+</html>
