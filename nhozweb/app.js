@@ -60,4 +60,5 @@ app.use(function (err, req, res, next) {
 module.exports = app;
 
 var port = 8080;
+console.log(`ESCUCHANDO EN PUERTO ${port}`);
 app.listen(port);

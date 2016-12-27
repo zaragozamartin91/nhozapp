@@ -35,19 +35,23 @@
 
       <main class="mdl-layout__content">
         <div class="page-content">
-
         
             <h1><%=title %></h1>
 
+            <% if(err) { %>
+              <span><%= err %></span>
+            <% } %>
+
             <!-- Simple Textfield -->
-            <form action="#" id="add-provider-form">
+            <form action="/providers/add" id="add-provider-form" method="post">
+              
               <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="add-provider-id">
+                <input class="mdl-textfield__input" type="text" id="add-provider-id" name="id">
                 <label class="mdl-textfield__label" for="provider-id">ID</label>
               </div>
 
               <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="add-provider-name">
+                <input class="mdl-textfield__input" type="text" id="add-provider-name" name="name">
                 <label class="mdl-textfield__label" for="add-provider-name">Nombre</label>
               </div>
 
@@ -59,12 +63,13 @@
 
 
 
+            <div id="providers-table-div">
             <% if(providers) { %>
-              <table id="providers-table" class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+              <table id="providers-table" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
                 <thead>
                   <tr>
-                    <th class="mdl-data-table__cell--non-numeric">ID</th>
-                    <th class="mdl-data-table__cell--non-numeric">Nombre</th>
+                    <th class="id mdl-data-table__cell--non-numeric">ID</th>
+                    <th class="name mdl-data-table__cell--non-numeric">Nombre</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -78,6 +83,7 @@
             <% } else { %>
               <h2>No tienes proveedores</h2>
             <% } %>
+            </div>
 
             
         </div>

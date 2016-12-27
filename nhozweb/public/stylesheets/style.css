@@ -6,15 +6,36 @@ a {
   padding: 20px;
 }
 
+/* <providers.ejs> ---------------------------------------------------------------------------------------------*/
+
+#providers-table-div {
+    width: 100%;
+}
+
 #providers-table {
-  width: 100%;
+    margin-left:auto; 
+    margin-right:auto;
+    width: 100%;
+}
+
+#providers-table th {
+  width: 5%;
+}
+
+#providers-table th.id {
+  width: 20%;
+}
+
+#providers-table th.name {
+  width: 75%;
 }
 
 #add-provider-form {
-  padding: 10px;
-  width: 100%;
+    padding: 10px;
 }
 
-#add-provider-button {
-  
+#add-provider-form input {
+    width: 100%;
 }
+
+/* </providers.ejs> ---------------------------------------------------------------------------------------------*/
