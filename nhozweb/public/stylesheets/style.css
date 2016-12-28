@@ -6,6 +6,14 @@ a {
   padding: 20px;
 }
 
+.err-div {
+  color: red;
+}
+
+.succ-div {
+  color: green;
+}
+
 /* <providers.ejs> ---------------------------------------------------------------------------------------------*/
 
 #providers-table-div {

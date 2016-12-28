@@ -1,9 +1,11 @@
+/* SUBMIT DE FORMULARIO DE AGREGADO DE PROVEEDOR. */
 $(document).ready(function () {
     $("#add-provider-button").click(function () {
         document.querySelector("#add-provider-form").submit();
     });
 });
 
+/* ELIMINACION DE PROVEEDORES SELECCIONADOS DE LA TABLA. */
 $(document).ready(function () {
     document.querySelector('#delete-providers-button').onclick = function () {
         var selectedTds = document.querySelectorAll('#providers-table tbody tr.is-selected td.id-cell');
@@ -25,13 +27,11 @@ $(document).ready(function () {
                         var msg = encodeURIComponent("Proveedores eliminados");
                         location.href = `/providers?succ=${msg}`
                     } if (data.err) {
-                        var msg = encodeURIComponent("Error al eliminar proveedores");
-                        location.href = `/providers?err=${msg}`
+                        document.querySelector('.err-div').innerHTML = "<span>Error al eliminar proveedores</span>";
                     }
                 },
                 error: function () {
-                    var msg = encodeURIComponent("Error al eliminar proveedores");
-                    location.href = `/providers?err=${msg}`
+                    document.querySelector('.err-div').innerHTML = "<span>Error al eliminar proveedores</span>";
                 }
             });
         }

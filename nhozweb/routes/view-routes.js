@@ -15,6 +15,11 @@ router.get('/providers', function (req, res, next) {
   }
 
   data.getProviderLike({ id: provId }, function (err, rows) {
+    if(err) {
+      msg.err = "Error de conexion con BBDD: no se pudieron obtener los proveedores";
+      rows = [];
+    }
+
     res.render('providers', {
       title: 'Proveedores',
       providers: rows,

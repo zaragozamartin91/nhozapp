@@ -38,13 +38,17 @@
         
             <h1><%=title %></h1>
 
-            <% if(msg.err) { %>
-              <span style="color:red;"><%= msg.err %></span>
-            <% } %>
+            <div class="err-div">
+              <% if(msg.err) { %>
+                <span><%= msg.err %></span>
+              <% } %>
+            </div>
 
-            <% if(msg.succ) { %>
-              <span style="color:green;"><%= msg.succ %></span>
-            <% } %>
+            <div class="succ-div">
+              <% if(msg.succ) { %>
+                <span><%= msg.succ %></span>
+              <% } %>
+            </div>
 
             <!-- Simple Textfield -->
             <form action="/providers/add" id="add-provider-form" method="post">
