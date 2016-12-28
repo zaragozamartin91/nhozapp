@@ -48,7 +48,6 @@
 
             <!-- Simple Textfield -->
             <form action="/providers/add" id="add-provider-form" method="post">
-              
               <div class="mdl-textfield mdl-js-textfield">
                 <input class="mdl-textfield__input" type="text" id="add-provider-id" name="id">
                 <label class="mdl-textfield__label" for="provider-id">ID</label>
@@ -59,13 +58,16 @@
                 <label class="mdl-textfield__label" for="add-provider-name">Nombre</label>
               </div>
 
-              <!-- Accent-colored raised button with ripple -->
-              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="add-provider-button">
+              <!-- Colored raised button -->
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
                 Agregar
               </button>
             </form>
 
-
+            <!-- Accent-colored raised button with ripple -->
+            <button id="delete-providers-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              Eliminar seleccionados
+            </button>
 
             <div id="providers-table-div">
             <% if(providers) { %>
@@ -80,7 +82,7 @@
 
               <% providers.forEach( function(provider) { %>
                 <tr>
-                  <td class="mdl-data-table__cell--non-numeric"><%=provider.id %></td>
+                  <td class="mdl-data-table__cell--non-numeric id-cell"><%=provider.id %></td>
                   <td class="mdl-data-table__cell--non-numeric"><%=provider.name %></td>
                 </tr>
               <% } ); %>
@@ -94,6 +96,7 @@
       </main>
     </div>
 
-    <script src="javascripts/search-trigger.js" />
+    <script src="javascripts/search-trigger.js"></script>
+    <script src="javascripts/providers.js" ></script>
   </body>
 </html>

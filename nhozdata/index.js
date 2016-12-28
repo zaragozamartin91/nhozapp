@@ -99,6 +99,34 @@ module.exports.providerExists = function (queryData, callback) {
     });
 };
 
+/** Elimina un grupo de proveedores.
+ * @param {Object} queryData Ids de proveedores a eliminar ya sea como arreglo o como objeto: {ids:[proveedores...]}.
+ * @param {Function} callback Funcion a invocar cuando termine la eliminacion de los proveedores.
+ */
+module.exports.deleteProviders = function (queryData, callback) {
+    var ids = queryData.ids || queryData;
+    if (ids) {
+        if (ids.length > 0) {
+            var query = `DELETE FROM ${config.providerTableName} WHERE`;
+            var lastIndex = ids.length - 1;
+            for (var i = 0; i < ids.length; i++) {
+                query += ` id="${ids[i]}"`;
+                if (i < lastIndex) {
+                    query += " OR";
+                }
+            }
+            console.log(`BORRANDO PROVEEDORES CON QUERY: ${query}`);
+            doQuery(function (db) {
+                db.query(query, callback);
+            });
+        } else {
+            callback(null);
+        }
+    } else {
+        callback(new Error("No se indicaron ids de proveedores a eliminar"));
+    }
+};
+
 /** Obtiene proveedores.
  * @param {Object} queryData Datos de los proveedores a eliminar.
  * @param {Function} callback Funcion a invocar cuando se obtengan los proveedores.
@@ -144,7 +172,7 @@ module.exports.addProvider = function (queryData, callback) {
         } else {
             var msg = 'NO SE INGRESO UN ID DE PROVEEDOR';
             console.error(msg);
-            callback({ msg: msg });
+            callback(new Error(msg));
         }
     });
 };

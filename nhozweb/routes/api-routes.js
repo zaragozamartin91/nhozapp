@@ -12,4 +12,21 @@ router.get('/providers', function (req, res, next) {
   });
 });
 
+router.post('/providers/delete', function (req, res, next) {
+  console.log("req.body:");
+  console.log(req.body);
+  var providerIds = req.body.providerIds;
+
+  data.deleteProviders({ ids: providerIds }, function (err) {
+    if (err) {
+      console.error(err);
+      res.send({ err: err });
+    } else {
+      res.send({ ok: "Proveedores eliminados correctamente" });
+    }
+  });
+
+
+});
+
 module.exports = router;
