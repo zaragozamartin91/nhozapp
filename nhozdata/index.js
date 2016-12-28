@@ -161,6 +161,7 @@ module.exports.getProviderLike = function (queryData, callback) {
  * @param {Function} callback Funcion a invocar despues de agregar el proveedor.
  */
 module.exports.addProvider = function (queryData, callback) {
+    queryData = queryData || {};
     var id = queryData.id;
     var name = queryData.name || `Proveedor ${id}`;
     var callback = callback || function () { };
@@ -183,6 +184,7 @@ module.exports.addProvider = function (queryData, callback) {
  * @param {Function} callback Funcion a invocar luego de agregar el articulo.
  */
 module.exports.addArticle = function (queryData, callback) {
+    queryData = queryData || {};
     var providerId = queryData.providerId;
     var id = queryData.id;
     if (providerId) {
@@ -213,6 +215,7 @@ module.exports.addArticle = function (queryData, callback) {
  * @param {Function} callback Funcion a invocar cuando termine la eliminacion.
  */
 module.exports.deleteArticle = function (queryData, callback) {
+    queryData = queryData || {};
     var providerId = queryData.providerId;
     var articleId = queryData.articleId;
     var callback = callback || function () { };
