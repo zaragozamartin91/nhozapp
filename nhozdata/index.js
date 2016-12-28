@@ -60,6 +60,29 @@ module.exports.deleteAllProviders = function (callback) {
     });
 };
 
+/** Obtiene proveedores a partir de una conexion ya establecida con la BBDD.
+ * @param {IConnection} db Conexion con la BBDD.
+ * @param {Object} queryData Datos de los proveedores a eliminar.
+ * @param {Function} callback Funcion a invocar cuando se obtengan los proveedores.
+ */
+module.exports.dbGetProvider = function (db, queryData, callback) {
+    queryData = queryData || {};
+    var callback = callback || function () { };
+
+    if (queryData.id) {
+        db.query(
+            `SELECT * FROM ${config.providerTableName} WHERE id="${queryData.id}"`,
+            callback);
+    } else if (queryData.name) {
+        db.query(
+            `SELECT * FROM ${config.providerTableName} WHERE name="${queryData.name}"`,
+            callback);
+    } else {
+        db.query(
+            `SELECT * FROM ${config.providerTableName}`,
+            callback);
+    }
+}
 
 /** Obtiene proveedores.
  * @param {Object} queryData Datos de los proveedores a eliminar.
@@ -67,25 +90,10 @@ module.exports.deleteAllProviders = function (callback) {
  */
 module.exports.getProvider = function (queryData, callback) {
     queryData = queryData || {};
-
-    var id = queryData.id;
-    var name = queryData.name;
     var callback = callback || function () { };
 
     doQuery(function (db) {
-        if (id) {
-            db.query(
-                `SELECT * FROM ${config.providerTableName} WHERE id="${id}"`,
-                callback);
-        } else if (name) {
-            db.query(
-                `SELECT * FROM ${config.providerTableName} WHERE name="${name}"`,
-                callback);
-        } else {
-            db.query(
-                `SELECT * FROM ${config.providerTableName}`,
-                callback);
-        }
+        module.exports.dbGetProvider(db, queryData, callback);
     });
 };
 
@@ -177,6 +185,37 @@ module.exports.addProvider = function (queryData, callback) {
             callback(new Error(msg));
         }
     });
+};
+
+/** Actualiza un proveedor.
+ * @param {Object} queryData Id del proveedor a actualizar.
+ * @param {Object} newData Nuevos datos del proveedor.
+ * @param {Function} callback Funcion a invocar despues de agregar el proveedor.
+ */
+module.exports.updateProvider = function (queryData, newData, callback) {
+    if (queryData) {
+        var providerId = queryData.id || queryData;
+        if (providerId) {
+
+            doQuery(function (db) {
+                exports.dbGetProvider(db, { id: providerId }, function (err, rows) {
+                    if (err) {
+                        callback(err);
+                    } else if (rows.length == 0) {
+                        callback(new Error(`Proveedor ${providerId} no existe`));
+                    } else {
+                        var provider = rows[0];
+                        var newId = newData.id || provider.id;
+                        var newName = newData.name || provider.name;
+                    }
+                });
+            });
+        } else {
+            callback(new Error("No se indico el ID del proveedor a actualizar"));
+        }
+    } else {
+        callback(new Error("No se indico informacion del proveedor a actualizar"));
+    }
 };
 
 /** Se agrega un articulo.

@@ -47,7 +47,7 @@ a {
     width: 100%;
 }
 
-#delete-providers-button, #add-provider-button {
+#delete-providers-button, #add-provider-button, #update-provider-button {
   margin-bottom: 10px;
   width: 100%;
 }

@@ -1,8 +1,39 @@
+function setErrDivMsg(msg) {
+    document.querySelector('.err-div').innerHTML = `<span>${msg}</span>`;
+}
+
+function providerIdFieldValue() {
+    return document.querySelector("#add-provider-id").value;
+}
+
+function providerNameFieldValue() {
+    return document.querySelector("#add-provider-name").value;
+}
+
 /* SUBMIT DE FORMULARIO DE AGREGADO DE PROVEEDOR. */
 $(document).ready(function () {
     $("#add-provider-button").click(function () {
-        document.querySelector("#add-provider-form").submit();
+        if (providerIdFieldValue() == "") {
+            setErrDivMsg("No se ingreso un id de proveedor!");
+        } else {
+            document.querySelector("#add-provider-form").submit();
+        }
     });
+});
+
+$(document).ready(function () {
+    $("#update-provider-button").click(function () {
+        var selectedTrs = document.querySelectorAll('#providers-table tbody tr.is-selected');
+        if (selectedTrs == 1) {
+            var selectedTr = selectedTrs[0];
+            var newProviderId = providerIdFieldValue();
+            var newProviderName = providerNameFieldValue();
+
+            // TODO: TERMINAR
+        } else {
+            setErrDivMsg("Solo se puede actualizar un proveedor a la vez");
+        }
+    })
 });
 
 /* ELIMINACION DE PROVEEDORES SELECCIONADOS DE LA TABLA. */
@@ -17,6 +48,7 @@ $(document).ready(function () {
 
             console.log(providerIds);
 
+
             $.ajax({
                 url: '/api/providers/delete',
                 type: 'POST',
@@ -27,11 +59,11 @@ $(document).ready(function () {
                         var msg = encodeURIComponent("Proveedores eliminados");
                         location.href = `/providers?succ=${msg}`
                     } if (data.err) {
-                        document.querySelector('.err-div').innerHTML = "<span>Error al eliminar proveedores</span>";
+                        setErrDivMsg("Error al eliminar proveedores");
                     }
                 },
                 error: function () {
-                    document.querySelector('.err-div').innerHTML = "<span>Error al eliminar proveedores</span>";
+                    setErrDivMsg("Error al eliminar proveedores");
                 }
             });
         }

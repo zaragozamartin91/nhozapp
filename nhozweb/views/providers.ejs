@@ -69,6 +69,11 @@
               Agregar
             </button>
 
+            <!-- Colored raised button -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id="update-provider-button">
+              Modificar seleccionado
+            </button>
+
             <!-- Accent-colored raised button with ripple -->
             <button id="delete-providers-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
               Eliminar seleccionados
@@ -88,7 +93,7 @@
               <% providers.forEach( function(provider) { %>
                 <tr>
                   <td class="mdl-data-table__cell--non-numeric id-cell"><%=provider.id %></td>
-                  <td class="mdl-data-table__cell--non-numeric"><%=provider.name %></td>
+                  <td class="mdl-data-table__cell--non-numeric name-cell"><%=provider.name %></td>
                 </tr>
               <% } ); %>
             <% } else { %>
