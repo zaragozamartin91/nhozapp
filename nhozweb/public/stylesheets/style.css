@@ -34,11 +34,12 @@ a {
     padding: 10px;
 }
 
+
 #add-provider-form input {
     width: 100%;
 }
 
-#delete-providers-button {
+#delete-providers-button, #add-provider-button {
   margin-bottom: 10px;
   width: 100%;
 }

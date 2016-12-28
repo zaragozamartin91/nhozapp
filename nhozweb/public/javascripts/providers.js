@@ -1,4 +1,10 @@
 $(document).ready(function () {
+    $("#add-provider-button").click(function () {
+        document.querySelector("#add-provider-form").submit();
+    });
+});
+
+$(document).ready(function () {
     document.querySelector('#delete-providers-button').onclick = function () {
         var selectedTds = document.querySelectorAll('#providers-table tbody tr.is-selected td.id-cell');
         if (selectedTds.length > 0) {
