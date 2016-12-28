@@ -104,6 +104,7 @@ module.exports.providerExists = function (queryData, callback) {
  * @param {Function} callback Funcion a invocar cuando termine la eliminacion de los proveedores.
  */
 module.exports.deleteProviders = function (queryData, callback) {
+    queryData = queryData || [];
     var ids = queryData.ids || queryData;
     if (ids) {
         if (ids.length > 0) {
