@@ -1,3 +1,7 @@
+function clearErrDivMsg(msg) {
+    document.querySelector('.err-div').innerHTML = `<span></span>`;
+}
+
 function setErrDivMsg(msg) {
     document.querySelector('.err-div').innerHTML = `<span>${msg}</span>`;
 }
@@ -15,6 +19,7 @@ function providerNameFieldValue() {
 /* SUBMIT DE FORMULARIO DE AGREGADO DE PROVEEDOR. */
 $(document).ready(function () {
     $("#add-provider-button").click(function () {
+        clearErrDivMsg();
         if (providerIdFieldValue() == "") {
             setErrDivMsg("No se ingreso un id de proveedor!");
         } else {
@@ -26,6 +31,7 @@ $(document).ready(function () {
 /* ACTUALIZACION DE PROVEEDORES */
 $(document).ready(function () {
     $("#update-provider-button").click(function () {
+        clearErrDivMsg();
         var selectedTrs = document.querySelectorAll('#providers-table tbody tr.is-selected');
         if (selectedTrs.length == 1) {
             var selectedTr = selectedTrs[0];
@@ -35,6 +41,7 @@ $(document).ready(function () {
             var newProviderName = providerNameFieldValue();
 
             if (newProviderId.trim() == "" && newProviderName.trim() == "") {
+                setErrDivMsg("No se indicaron datos de actualizacion");
                 return;
             }
 
@@ -72,6 +79,7 @@ $(document).ready(function () {
 /* ELIMINACION DE PROVEEDORES SELECCIONADOS DE LA TABLA. */
 $(document).ready(function () {
     document.querySelector('#delete-providers-button').onclick = function () {
+        clearErrDivMsg();
         var selectedTds = document.querySelectorAll('#providers-table tbody tr.is-selected td.id-cell');
         if (selectedTds.length > 0) {
             var providerIds = [];
