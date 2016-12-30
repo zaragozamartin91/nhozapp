@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+
+    <% include head %>
+
+  </head>
+  <body>
+
+
+    <!-- The drawer is always open in large screens. The header is always shown,
+      even in small screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+                mdl-layout--fixed-header">
+
+    <!-- ENCABEZADO DE BUSQUEDA -->
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <div class="mdl-layout-spacer"></div>
+        </div>
+      </header>
+
+      <% include drawer_menu %>
+
+      <main class="mdl-layout__content">
+        <div class="page-content">
+        
+            <h1><%=title %></h1>
+
+            <div class="err-div">
+              <% if(msg.err) { %>
+                <span><%= msg.err %></span>
+              <% } %>
+            </div>
+
+            <div class="succ-div">
+              <% if(msg.succ) { %>
+                <span><%= msg.succ %></span>
+              <% } %>
+            </div>
+
+            <!-- Simple Textfield -->
+            <form action="/providers/add" id="add-provider-form" method="post">
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="add-provider-id" name="id">
+                <label class="mdl-textfield__label" for="provider-id">ID</label>
+              </div>
+
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="add-provider-name" name="name">
+                <label class="mdl-textfield__label" for="add-provider-name">Nombre</label>
+              </div>
+            </form>
+            
+            
+            <!-- Colored raised button -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id="add-provider-button">
+              Agregar
+            </button>
+
+            <!-- Colored raised button -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id="update-provider-button">
+              Modificar seleccionado
+            </button>
+
+            <!-- Accent-colored raised button with ripple -->
+            <button id="delete-providers-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              Eliminar seleccionados
+            </button>
+            
+        </div>
+      </main>
+    </div>
+
+    <script src="javascripts/search-trigger.js"></script>
+  </body>
+</html>

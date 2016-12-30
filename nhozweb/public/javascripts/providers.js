@@ -1,3 +1,7 @@
+function clearSuccDivMsg() {
+    document.querySelector('.succ-div').innerHTML = `<span></span>`;
+}
+
 function clearErrDivMsg(msg) {
     document.querySelector('.err-div').innerHTML = `<span></span>`;
 }
@@ -20,6 +24,7 @@ function providerNameFieldValue() {
 $(document).ready(function () {
     $("#add-provider-button").click(function () {
         clearErrDivMsg();
+        clearSuccDivMsg();
         if (providerIdFieldValue() == "") {
             setErrDivMsg("No se ingreso un id de proveedor!");
         } else {
@@ -32,6 +37,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     $("#update-provider-button").click(function () {
         clearErrDivMsg();
+        clearSuccDivMsg();
         var selectedTrs = document.querySelectorAll('#providers-table tbody tr.is-selected');
         if (selectedTrs.length == 1) {
             var selectedTr = selectedTrs[0];
@@ -57,14 +63,16 @@ $(document).ready(function () {
                     }
                 }),
                 success: function (data) {
-                    if (data.ok) {
-                        var msg = encodeURIComponent(data.ok);
-                        location.href = `/providers?succ=${msg}`
-                    } if (data.err) {
-                        setErrDivMsg(data.err.message);
+                    if (data) {
+                        if (data.ok) {
+                            var msg = encodeURIComponent(data.ok);
+                            location.href = `/providers?succ=${msg}`
+                        } if (data.err) {
+                            setErrDivMsg(data.err.message);
+                        }
                     }
                 },
-                error: function () {
+                error: function (data) {
                     setErrDivMsg(data.err.message);
                 }
             });
@@ -80,6 +88,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     document.querySelector('#delete-providers-button').onclick = function () {
         clearErrDivMsg();
+        clearSuccDivMsg();
         var selectedTds = document.querySelectorAll('#providers-table tbody tr.is-selected td.id-cell');
         if (selectedTds.length > 0) {
             var providerIds = [];
@@ -107,6 +116,8 @@ $(document).ready(function () {
                     setErrDivMsg("Error al eliminar proveedores");
                 }
             });
+        } else {
+            setErrDivMsg("No se seleccionaron proveedores");
         }
     };
 });

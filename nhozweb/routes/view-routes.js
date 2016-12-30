@@ -15,7 +15,7 @@ router.get('/providers', function (req, res, next) {
   }
 
   data.getProviderLike({ id: provId }, function (err, rows) {
-    if(err) {
+    if (err) {
       msg.err = "Error de conexion con BBDD: no se pudieron obtener los proveedores";
       rows = [];
     }
@@ -59,6 +59,19 @@ router.post('/providers/add', function (req, res, next) {
     var error = encodeURIComponent("No se ingreso un id de proveedor!");
     res.redirect(`/providers?err=${error}`);
   }
+});
+
+
+router.get('/articles', function (req, res, next) {
+  var msg = {
+    err: req.query.err,
+    succ: req.query.succ
+  }
+
+  res.render('articles', {
+    title: 'Articulos',
+    msg: msg,
+  });
 });
 
 
