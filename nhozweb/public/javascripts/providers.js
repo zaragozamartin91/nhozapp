@@ -2,10 +2,12 @@ function setErrDivMsg(msg) {
     document.querySelector('.err-div').innerHTML = `<span>${msg}</span>`;
 }
 
+/** OBTIENE EL VALOR DEL CAMPO DE TEXTO DE ID DE PROVEEDOR */
 function providerIdFieldValue() {
     return document.querySelector("#add-provider-id").value;
 }
 
+/** OBTIENE EL VALOR DEL CAMPO DE TEXTO DE NOMBRE DE PROVEEDOR */
 function providerNameFieldValue() {
     return document.querySelector("#add-provider-name").value;
 }
@@ -21,17 +23,48 @@ $(document).ready(function () {
     });
 });
 
+/* ACTUALIZACION DE PROVEEDORES */
 $(document).ready(function () {
     $("#update-provider-button").click(function () {
         var selectedTrs = document.querySelectorAll('#providers-table tbody tr.is-selected');
-        if (selectedTrs == 1) {
+        if (selectedTrs.length == 1) {
             var selectedTr = selectedTrs[0];
+            var providerId = selectedTr.querySelector('td.id-cell').innerHTML;
+
             var newProviderId = providerIdFieldValue();
             var newProviderName = providerNameFieldValue();
 
-            // TODO: TERMINAR
-        } else {
+            if (newProviderId.trim() == "" && newProviderName.trim() == "") {
+                return;
+            }
+
+            $.ajax({
+                url: '/api/providers/update',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    queryData: providerId,
+                    newData: {
+                        id: newProviderId,
+                        name: newProviderName
+                    }
+                }),
+                success: function (data) {
+                    if (data.ok) {
+                        var msg = encodeURIComponent(data.ok);
+                        location.href = `/providers?succ=${msg}`
+                    } if (data.err) {
+                        setErrDivMsg(data.err.message);
+                    }
+                },
+                error: function () {
+                    setErrDivMsg(data.err.message);
+                }
+            });
+        } else if (selectedTrs.length > 1) {
             setErrDivMsg("Solo se puede actualizar un proveedor a la vez");
+        } else {
+            setErrDivMsg("No se seleccionaron proveedores");
         }
     })
 });

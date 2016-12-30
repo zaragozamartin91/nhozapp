@@ -29,4 +29,19 @@ router.post('/providers/delete', function (req, res, next) {
 
 });
 
+router.post('/providers/update', function (req, res, next) {
+  console.log("req.body:");
+  console.log(req.body);
+  var queryData = req.body.queryData;
+  var newData = req.body.newData;
+
+  data.updateProvider(queryData, newData, function (err) {
+    if (err) {
+      res.send({ err: err });
+    } else {
+      res.send({ ok: `Proveedor actualizado` });
+    }
+  });
+});
+
 module.exports = router;

@@ -1,16 +1,21 @@
 var config = require('./config');
 var mysql = require('mysql');
 
-/** Realiza una query en la BBDD.
- * @param {Function} queryActions Acciones/Queries a realizar. Funciones que reciben como parametro un objeto tipo conexion listo para usar.
- */
-function doQuery(queryActions) {
-    var connection = mysql.createConnection({
+/** Crea una conexion con la BBDD. */
+function createConnection() {
+    return mysql.createConnection({
         host: config.host,
         user: config.user,
         password: config.password,
         database: config.database
     });
+}
+
+/** Realiza una query en la BBDD.
+ * @param {Function} queryActions Acciones/Queries a realizar. Funciones que reciben como parametro un objeto tipo conexion listo para usar.
+ */
+function doQuery(queryActions) {
+    var connection = createConnection();
     connection.connect(function (err) {
         if (err) {
             console.error("ERROR AL OBTENER CONEXION CON BBDD");
@@ -188,6 +193,22 @@ module.exports.addProvider = function (queryData, callback) {
 };
 
 /** Actualiza un proveedor.
+ * @param {IConnection} db Conexion con la BBDD.
+ * @param {Object} queryData Id del proveedor a actualizar.
+ * @param {Object} newData Nuevos datos del proveedor.
+ * @param {Function} callback Funcion a invocar despues de agregar el proveedor.
+ */
+module.exports.dbUpdateProvider = function (db, queryData, newData, callback) {
+    if (queryData) {
+        var providerId = queryData.id || queryData;
+        var query = `UPDATE ${config.providerTableName} SET id="${newData.id}", name="${newData.name}" WHERE id="${providerId}"`;
+        db.query(query, callback);
+    } else {
+        callback(new Error("No se indico informacion del proveedor a actualizar"));
+    }
+};
+
+/** Actualiza un proveedor.
  * @param {Object} queryData Id del proveedor a actualizar.
  * @param {Object} newData Nuevos datos del proveedor.
  * @param {Function} callback Funcion a invocar despues de agregar el proveedor.
@@ -197,18 +218,28 @@ module.exports.updateProvider = function (queryData, newData, callback) {
         var providerId = queryData.id || queryData;
         if (providerId) {
 
-            doQuery(function (db) {
-                exports.dbGetProvider(db, { id: providerId }, function (err, rows) {
-                    if (err) {
-                        callback(err);
-                    } else if (rows.length == 0) {
-                        callback(new Error(`Proveedor ${providerId} no existe`));
-                    } else {
-                        var provider = rows[0];
-                        var newId = newData.id || provider.id;
-                        var newName = newData.name || provider.name;
-                    }
-                });
+            var db = createConnection();
+            db.connect(function (err) {
+                if (err) {
+                    callback(new Error("Error al establecer conexion con la BBDD"));
+                } else {
+                    exports.dbGetProvider(db, { id: providerId }, function (err, rows) {
+                        if (err) {
+                            callback(err);
+                        } else if (rows.length == 0) {
+                            callback(new Error(`Proveedor ${providerId} no existe`));
+                        } else {
+                            var provider = rows[0];
+                            var newId = newData.id || provider.id;
+                            var newName = newData.name || provider.name;
+
+                            module.exports.dbUpdateProvider(db, provider.id, { id: newId, name: newName }, function (err) {
+                                callback(err);
+                                db.end();
+                            });
+                        }
+                    });
+                }
             });
         } else {
             callback(new Error("No se indico el ID del proveedor a actualizar"));
