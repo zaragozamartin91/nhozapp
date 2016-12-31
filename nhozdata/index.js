@@ -10,8 +10,9 @@ function createConnection() {
         database: config.database
     });
 }
+exports.createConnection = createConnection;
 
-/** Realiza una query en la BBDD.
+/** Realiza una query en la BBDD abriendo una conexion, ejecutando queries y cerrando la conexion. No funciona con NESTED QUERIES, solo sirve para queries regulares.
  * @param {Function} queryActions Acciones/Queries a realizar. Funciones que reciben como parametro un objeto tipo conexion listo para usar.
  */
 function doQuery(queryActions) {
@@ -37,21 +38,28 @@ module.exports.deleteProvider = function (queryData, callback) {
     var name = queryData.name;
     var callback = callback || function () { };
 
-    doQuery(function (db) {
-        if (id) {
-            db.query(
-                `DELETE FROM ${config.providerTableName} WHERE id="${id}"`,
-                callback);
-        } else if (name) {
-            db.query(
-                `DELETE FROM ${config.providerTableName} WHERE name="${name}"`,
-                callback);
+    var db = createConnection();
+    db.connect(function (err) {
+        if (err) {
+            callback(err);
         } else {
-            var msg = "NO SE INDICARON DATOS SUFICIENTES PARA ELIMINAR AL PROVEEDOR";
-            console.error(msg);
-            callback({ msg });
+            if (id) {
+                db.query(
+                    `DELETE FROM ${config.providerTableName} WHERE id="${id}"`,
+                    callback);
+            } else if (name) {
+                db.query(
+                    `DELETE FROM ${config.providerTableName} WHERE name="${name}"`,
+                    callback);
+            } else {
+                var msg = "NO SE INDICARON DATOS SUFICIENTES PARA ELIMINAR AL PROVEEDOR";
+                console.error(msg);
+                callback(new Error(msg));
+            }
+
+            db.end();
         }
-    })
+    });
 };
 
 /** Elimina todos los proveedores.
@@ -102,6 +110,10 @@ module.exports.getProvider = function (queryData, callback) {
     });
 };
 
+/** Determina si un proveedor existe.
+ * @param {Object} queryData Informacion del proveedor buscado.
+ * @param {Function} callback Funcion a ejecutar al finalizar.
+ */
 module.exports.providerExists = function (queryData, callback) {
     module.exports.getProvider(queryData, function (err, rows) {
         var exists = false;
@@ -199,6 +211,8 @@ module.exports.addProvider = function (queryData, callback) {
  * @param {Function} callback Funcion a invocar despues de agregar el proveedor.
  */
 module.exports.dbUpdateProvider = function (db, queryData, newData, callback) {
+    var callback = callback || function () { };
+
     if (queryData) {
         var providerId = queryData.id || queryData;
         var query = `UPDATE ${config.providerTableName} SET id="${newData.id}", name="${newData.name}" WHERE id="${providerId}"`;
@@ -214,6 +228,8 @@ module.exports.dbUpdateProvider = function (db, queryData, newData, callback) {
  * @param {Function} callback Funcion a invocar despues de agregar el proveedor.
  */
 module.exports.updateProvider = function (queryData, newData, callback) {
+    var callback = callback || function () { };
+
     if (queryData) {
         var providerId = queryData.id || queryData;
         if (providerId) {
@@ -257,6 +273,9 @@ module.exports.addArticle = function (queryData, callback) {
     queryData = queryData || {};
     var providerId = queryData.providerId;
     var id = queryData.id;
+    var callback = callback || function () { };
+
+
     if (providerId) {
         if (id) {
             var description = queryData.description || `Articulo ${id} de proveedor ${providerId}`;
@@ -290,19 +309,27 @@ module.exports.deleteArticle = function (queryData, callback) {
     var articleId = queryData.articleId;
     var callback = callback || function () { };
 
-    if (providerId) {
-        if (articleId) {
-            db.query(
-                `DELETE FROM ${config.articleTableName} WHERE provider_id="${providerId}" AND id="${articleId}"`,
-                callback);
+    var db = createConnection();
+    db.connect(function (err) {
+        if (err) {
+            callback(new Error("No se pudo obtener la conexion con la BBDD"));
         } else {
-            db.query(
-                `DELETE FROM ${config.articleTableName} WHERE provider_id="${providerId}"`,
-                callback);
+            if (providerId) {
+                if (articleId) {
+                    db.query(
+                        `DELETE FROM ${config.articleTableName} WHERE provider_id="${providerId}" AND id="${articleId}"`,
+                        callback);
+                } else {
+                    db.query(
+                        `DELETE FROM ${config.articleTableName} WHERE provider_id="${providerId}"`,
+                        callback);
+                }
+            } else {
+                var msg = "NO SE INGRESO UN ID DE PROVEEDOR DEL ARTICULO";
+                console.error(msg);
+                callback({ msg });
+            }
+            db.end();
         }
-    } else {
-        var msg = "NO SE INGRESO UN ID DE PROVEEDOR DEL ARTICULO";
-        console.error(msg);
-        callback({ msg });
-    }
+    });
 };
