@@ -56,4 +56,29 @@ label.mdl-textfield__label {
   width: 100%;
 }
 
+@media all and (min-width:700px){ 
+  .add-provider-textfield{ width: 45%; }
+}
+
+@media all and (max-width:699px){ 
+  .add-provider-textfield{ width: 100%; }
+}
+
 /* </providers.ejs> ---------------------------------------------------------------------------------------------*/
+
+/* <articles.ejs> ---------------------------------------------------------------------------------------------*/
+
+#find-article-button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+@media all and (min-width:700px){ 
+  .find-article-textfield{ width: 30%; }
+}
+
+@media all and (max-width:699px){ 
+  .find-article-textfield{ width: 100%; }
+}
+
+/* </articles.ejs> ---------------------------------------------------------------------------------------------*/
