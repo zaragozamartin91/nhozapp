@@ -299,6 +299,55 @@ module.exports.addArticle = function (queryData, callback) {
     }
 };
 
+module.exports.getArticle = function (queryData, callback) {
+    var queryData = queryData || {};
+    var callback = callback || function () { };
+    var articleId = queryData.id;
+    var providerId = queryData.providerId;
+    var description = queryData.description;
+
+    var db = createConnection();
+    db.connect(function (err) {
+        if (err) {
+            callback(new Error("Error al conectarse con BBDD"));
+            return;
+        }
+
+        if (articleId || providerId || description) {
+            var query = `SELECT * FROM ${config.articleTableName} WHERE `;
+            var firstWhereSet = false;
+
+            if (providerId) {
+                firstWhereSet = true;
+                query += `provider_id="${providerId}" `;
+            }
+
+            if (articleId) {
+                if (firstWhereSet) {
+                    query += `AND id="${articleId}"`;
+                } else {
+                    firstWhereSet = true;
+                    query += `id="${articleId}"`;
+                }
+            }
+
+            if (description) {
+                if (firstWhereSet) {
+                    query += `AND description="${description}" `;
+                } else {
+                    query += `description="${description}" `;
+                }
+            }
+
+            db.query(query, callback);
+        } else {
+            callback(new Error("No se ingreso informacion para buscar articulo"));
+        }
+
+        db.end();
+    });
+};
+
 /** Elimina articulos.
  * @param {Object} queryData Datos del articulo a eliminar.
  * @param {Function} callback Funcion a invocar cuando termine la eliminacion.

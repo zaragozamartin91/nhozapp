@@ -63,16 +63,28 @@ router.post('/providers/add', function (req, res, next) {
 
 
 router.get('/articles', function (req, res, next) {
+  var articleId = req.query.articleId;
+  var providerId = req.query.providerId;
+  var description = req.query.description;
   var msg = {
     err: req.query.err,
     succ: req.query.succ
   }
 
-  res.render('articles', {
-    title: 'Articulos',
-    msg: msg,
-  });
+  data.getArticle({
+    id: articleId,
+    providerId: providerId,
+    description: description
+  }, function (err, rows) {
+    res.render('articles', {
+      title: 'Articulos',
+      msg: msg,
+      articles: rows
+    });
+  })
 });
+
+
 
 
 module.exports = router;
