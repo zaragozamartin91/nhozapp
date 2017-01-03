@@ -71,11 +71,17 @@ router.get('/articles', function (req, res, next) {
     succ: req.query.succ
   }
 
-  data.getArticle({
+  var queryData = {
     id: articleId,
     providerId: providerId,
     description: description
-  }, function (err, rows) {
+  };
+
+  data.getArticle(queryData, function (err, rows) {
+    if (err) {
+      msg.err = err.message;
+    }
+
     res.render('articles', {
       title: 'Articulos',
       msg: msg,
