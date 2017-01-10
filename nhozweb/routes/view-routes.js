@@ -76,7 +76,6 @@ router.get('/articles', function (req, res, next) {
     id: articleId,
     providerId: providerId,
     description: description
-<<<<<<< HEAD
   }
 
   data.getArticle(queryData, function (err, rows) {
@@ -85,16 +84,13 @@ router.get('/articles', function (req, res, next) {
     }
 
     rows = rows || [];
-
-=======
-  };
+  });
 
   data.getArticle(queryData, function (err, rows) {
     if (err) {
       msg.err = err.message;
     }
 
->>>>>>> 50bef5ba5424288aaebf27cf5926e18cf46943c6
     res.render('articles', {
       title: 'Articulos',
       msg: msg,
