@@ -21,8 +21,6 @@
   <body>
 
 
-    <!-- The drawer is always open in large screens. The header is always shown,
-      even in small screens. -->
     <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
                 mdl-layout--fixed-header">
 
@@ -38,62 +36,63 @@
       <main class="mdl-layout__content">
         <div class="page-content">
         
-            <h1><%=title %></h1>
+          <h1><%=title %></h1>
 
-            <div class="err-div">
-              <% if(msg.err) { %>
-                <span><%= msg.err %></span>
-              <% } %>
+          <div class="err-div">
+            <% if(msg.err) { %>
+              <span><%= msg.err %></span>
+            <% } %>
+          </div>
+
+          <div class="succ-div">
+            <% if(msg.succ) { %>
+              <span><%= msg.succ %></span>
+            <% } %>
+          </div>
+
+          <form action="/articles" id="find-article-form" method="get">
+            <div class="find-article-textfield mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" id="find-article-id" name="articleId">
+              <label class="mdl-textfield__label" for="provider-id">Articulo</label>
             </div>
 
-            <div class="succ-div">
-              <% if(msg.succ) { %>
-                <span><%= msg.succ %></span>
-              <% } %>
+            <div class="find-article-textfield mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" id="find-article-provider" name="providerId">
+              <label class="mdl-textfield__label" for="provider-id">Proveedor</label>
             </div>
 
-            <form action="/articles" id="find-article-form" method="get">
-              <div class="find-article-textfield mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="find-article-id" name="articleId">
-                <label class="mdl-textfield__label" for="provider-id">Articulo</label>
-              </div>
+            <div class="find-article-textfield mdl-textfield mdl-js-textfield">
+              <input class="mdl-textfield__input" type="text" id="find-article-name" name="description">
+              <label class="mdl-textfield__label" for="find-article-name">Descripcion/Nombre</label>
+            </div>
 
-              <div class="find-article-textfield mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="find-article-provider" name="providerId">
-                <label class="mdl-textfield__label" for="provider-id">Proveedor</label>
-              </div>
+            <!-- Colored raised button -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id="find-article-button">
+              Buscar
+            </button>
+          </form>
 
-              <div class="find-article-textfield mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="find-article-name" name="description">
-                <label class="mdl-textfield__label" for="find-article-name">Descripcion/Nombre</label>
-              </div>
 
-              <!-- Colored raised button -->
-              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id="find-article-button">
-                Buscar
-              </button>
-            </form>
-
-<div class="demo-card-square mdl-card mdl-shadow--2dp">
-  <div class="mdl-card__title mdl-card--expand">
-    <h2 class="mdl-card__title-text">09-567: Lampara 75w</h2>
-  </div>
-  <div class="mdl-card__supporting-text">
-    Precio: $12.6 <br/>
-    Stock: 23 unidades <br/>
-    Stock inicial: 50 unidades
-  </div>
-  <div class="mdl-card__actions mdl-card--border">
-    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-      Modificar
-    </a>
-    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-      Vender
-    </a>
-  </div>
-</div>
+          <div class="demo-card-square mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__title mdl-card--expand">
+              <h2 class="mdl-card__title-text">09-567: Lampara 75w</h2>
+            </div>
+            <div class="mdl-card__supporting-text">
+              Precio: $12.6 <br/>
+              Stock: 23 unidades <br/>
+              Stock inicial: 50 unidades
+            </div>
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                Modificar
+              </a>
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
+                Vender
+              </a>
+            </div>
+          </div>
             
-        </div>
+        </div> <!-- page-content -->
       </main>
     </div>
 
