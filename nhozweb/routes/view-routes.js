@@ -78,25 +78,27 @@ router.get('/articles', function (req, res, next) {
     description: description
   }
 
-  data.getArticle(queryData, function (err, rows) {
-    if (err) {
-      msg.err = err;
-    }
+  if (articleId || providerId || description) {
+    data.getArticle(queryData, function (err, rows) {
+      if (err) {
+        msg.err = err.message;
+      }
 
-    rows = rows || [];
-  });
+      rows = rows || [];
 
-  data.getArticle(queryData, function (err, rows) {
-    if (err) {
-      msg.err = err.message;
-    }
-
+      res.render('articles', {
+        title: 'Articulos',
+        msg: msg,
+        articles: rows
+      });
+    })
+  } else {
     res.render('articles', {
       title: 'Articulos',
       msg: msg,
-      articles: rows
+      articles: []
     });
-  })
+  }
 });
 
 

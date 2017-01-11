@@ -1,15 +1,3 @@
-function clearSuccDivMsg() {
-    document.querySelector('.succ-div').innerHTML = `<span></span>`;
-}
-
-function clearErrDivMsg(msg) {
-    document.querySelector('.err-div').innerHTML = `<span></span>`;
-}
-
-function setErrDivMsg(msg) {
-    document.querySelector('.err-div').innerHTML = `<span>${msg}</span>`;
-}
-
 /** OBTIENE EL VALOR DEL CAMPO DE TEXTO DE ID DE PROVEEDOR */
 function providerIdFieldValue() {
     return document.querySelector("#add-provider-id").value;
@@ -120,4 +108,8 @@ $(document).ready(function () {
             setErrDivMsg("No se seleccionaron proveedores");
         }
     };
+});
+
+$(document).ready(function(){
+    document.querySelector('#search-input').focus();
 });

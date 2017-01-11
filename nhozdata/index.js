@@ -299,6 +299,10 @@ module.exports.addArticle = function (queryData, callback) {
     }
 };
 
+/** Obtiene articulos.
+ * @param {Object} queryData Informacion de busqueda del articulo: id, proveedor, descripcion...
+ * @param {Function} callback Funcion a invocar cuando la query termine.
+ */
 module.exports.getArticle = function (queryData, callback) {
     var queryData = queryData || {};
     var callback = callback || function () { };
