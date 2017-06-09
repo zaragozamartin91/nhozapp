@@ -1,20 +1,43 @@
 import React from 'react';
+import ProvidersTableRow from './ProvidersTableRow';
 
 var ProvidersTable = React.createClass({
-    getDefaultProps: function() {
+    getInitialState: function () {
+        return {
+            selectedProviders: []
+        }
+    },
+
+    getDefaultProps: function () {
         return { providers: [] };
+    },
+
+    onRowClick: function (provider) {
+        console.log("onRowClick provider:");
+        console.log(provider);
+        
+        let selectedProviders = this.state.selectedProviders;
+        let selectedProviderIndex = selectedProviders.indexOf(provider.id);
+        if (selectedProviderIndex >= 0) {
+            selectedProviders.splice(selectedProviderIndex, 1);
+        } else {
+            selectedProviders.push(provider.id);
+        }
+        console.log('selectedProviders: ');
+        console.log(selectedProviders);
+
+        this.setState({ selectedProviders: selectedProviders });
     },
 
     render: function () {
         let providers = this.props.providers;
 
         let providerRows = providers.map(provider => {
-            return (
-                <tr>
-                    <td className="mdl-data-table__cell--non-numeric id-cell">{provider.id}</td>
-                    <td className="mdl-data-table__cell--non-numeric name-cell">{provider.name}</td>
-                </tr>
-            );
+            let isSelected = this.state.selectedProviders.indexOf(provider.id) >= 0;
+            return (<ProvidersTableRow
+                provider={provider}
+                onClick={this.onRowClick}
+                selected={isSelected} />)
         });
 
         let tableElem = providerRows.length == 0 ? <div /> : (
@@ -23,7 +46,7 @@ var ProvidersTable = React.createClass({
                 <table id="providers-table" className="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
                     <thead>
                         <tr>
-                            <th className="id mdl-data-table__cell--non-numeric">ID</th>
+                            <th >ID</th>
                             <th className="name mdl-data-table__cell--non-numeric">Nombre</th>
                         </tr>
                     </thead>
