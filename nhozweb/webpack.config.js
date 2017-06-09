@@ -3,7 +3,8 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        index: path.join(__dirname, 'components', 'Index.js')
+        index: path.join(__dirname, 'components', 'Index.js'),
+        providers: path.join(__dirname, 'components', 'providers' , 'ProvidersApp.js')
     },
 
     /* Se creara un archivo por cada entrada */

@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var data = require('../../nhozdata');
 
-/* GET users listing. */
 router.get('/providers', function (req, res, next) {
   data.getProvider({}, function (err, rows) {
     res.send({
@@ -10,6 +9,43 @@ router.get('/providers', function (req, res, next) {
       providers: rows
     });
   });
+});
+
+router.post('/providers/add', function (req, res, next) {
+  console.log("req.body:");
+  console.log(req.body);
+
+  var providerId = req.body.id;
+  if (providerId) {
+    var providerName = req.body.name || `Proveedor ${providerId}`;
+
+    data.providerExists({ id: providerId }, function (err, exists) {
+      if (err) {
+        console.error(`Error al verificar proveedores ${err}`);
+        var error = "Error al verificar proveedores";
+        res.send({ err: error });
+      } else if (exists) {
+        var error = `Proveedor ${providerId} ya existe!`;
+        res.send({ err: error });
+      } else {
+        console.log(`agregando proveedor ${providerId} ${providerName}`);
+        data.addProvider({ id: providerId, name: providerName }, function (err) {
+          if (err) {
+            console.error(`Error al agregar proveedor ${providerId}: ${err}`);
+            var error = `Error al agregar proveedor ${providerId}`;
+            res.send({ err: error });
+          } else {
+            var succ = `Proveedor ${providerId} agregado`;
+            console.log(succ);
+            res.send({ ok: succ });
+          }
+        });
+      }
+    });
+  } else {
+    var error = "No se ingreso un id de proveedor!";
+    res.send({ err: error });
+  }
 });
 
 router.post('/providers/delete', function (req, res, next) {

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+
+    <% include head %>
+
+  </head>
+  <body>
+
+
+    <!-- The drawer is always open in large screens. The header is always shown,
+      even in small screens. -->
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer
+                mdl-layout--fixed-header">
+      
+      <!-- ENCABEZADO DE BUSQUEDA -->
+      <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+          <div class="mdl-layout-spacer"></div>
+          <div class="mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right">
+            <label class="mdl-button mdl-js-button mdl-button--icon" for="search-input">
+              <img src="images/ic_search_white_24px.svg" alt="Search">
+            </label>
+            <div class="mdl-textfield__expandable-holder">
+              <form action="/providers" id="search-form" method="get">
+                <input class="mdl-textfield__input" type="text" name="id" id="search-input">
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <% include drawer_menu %>
+
+      <main class="mdl-layout__content">
+        <div class="page-content">
+        
+            <h1><%=title %></h1>
+
+            <div class="err-div">
+              <% if(msg.err) { %>
+                <span><%= msg.err %></span>
+              <% } %>
+            </div>
+
+            <div class="succ-div">
+              <% if(msg.succ) { %>
+                <span><%= msg.succ %></span>
+              <% } %>
+            </div>
+
+            <!-- Simple Textfield -->
+            <form action="/providers/add" id="add-provider-form" method="post">
+              <div class="add-provider-textfield mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="add-provider-id" name="id">
+                <label class="mdl-textfield__label" for="provider-id">ID</label>
+              </div>
+
+              <div class="add-provider-textfield mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="add-provider-name" name="name">
+                <label class="mdl-textfield__label" for="add-provider-name">Nombre</label>
+              </div>
+            </form>
+            
+            
+            <!-- Colored raised button -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id="add-provider-button">
+              Agregar
+            </button>
+
+            <!-- Colored raised button -->
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id="update-provider-button">
+              Modificar seleccionado
+            </button>
+
+            <!-- Accent-colored raised button with ripple -->
+            <button id="delete-providers-button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
+              Eliminar seleccionados
+            </button>
+
+            <div id="providers-table-div">
+            <% if(providers) { %>
+              <table id="providers-table" class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                <thead>
+                  <tr>
+                    <th class="id mdl-data-table__cell--non-numeric">ID</th>
+                    <th class="name mdl-data-table__cell--non-numeric">Nombre</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+              <% providers.forEach( function(provider) { %>
+                <tr>
+                  <td class="mdl-data-table__cell--non-numeric id-cell"><%=provider.id %></td>
+                  <td class="mdl-data-table__cell--non-numeric name-cell"><%=provider.name %></td>
+                </tr>
+              <% } ); %>
+            <% } else { %>
+              <h2>No tienes proveedores</h2>
+            <% } %>
+            </div>
+
+            
+        </div>
+      </main>
+    </div>
+
+    <script src="javascripts/set-view-msg.js" ></script>
+    <script src="javascripts/search-trigger.js"></script>
+    <script src="javascripts/providers.js" ></script>
+  </body>
+</html>
