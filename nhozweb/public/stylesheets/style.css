@@ -57,7 +57,8 @@ label.mdl-textfield__label {
 }
 
 @media all and (min-width:700px){ 
-  .add-provider-textfield{ width: 45%; }
+  .add-provider-textfield{ width: 50%; }
+  .add-provider-textfield{ padding-right: 10px; }
 }
 
 @media all and (max-width:699px){ 
