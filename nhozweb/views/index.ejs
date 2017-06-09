@@ -1,26 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
 
-    <% include head %>
+<head>
+  <title>
+    <%= title %>
+  </title>
 
-  </head>
-  <body>
+  <% include head %>
 
+</head>
 
-    <!-- The drawer is always open in large screens. The header is always shown,
+<body>
+  <!-- The drawer is always open in large screens. The header is always shown,
       even in small screens. -->
-    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-      
-      <% include layout_header %>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+
+    <% include layout_header %>
 
       <% include drawer_menu %>
 
-      <main class="mdl-layout__content">
-        <div class="page-content"><!-- Your content goes here --></div>
-      </main>
-    </div>
+        <main class="mdl-layout__content">
+          <div class="page-content" id="app"></div>
+        </main>
+  </div>
 
-  </body>
+  <script src="javascripts/common.bundle.js"></script>
+  <script src="javascripts/index.bundle.js"></script>
+</body>
+
 </html>
