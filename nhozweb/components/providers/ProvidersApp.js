@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import ProviderForm from './ProviderForm';
 import AddProviderButton from './AddProviderButton';
+import DeleteProvidersButton from './DeleteProvidersButton';
 import ProvidersTable from './ProvidersTable';
 
 var ProvidersApp = React.createClass({
@@ -50,7 +51,7 @@ var ProvidersApp = React.createClass({
                             errMsg: ""
                         });
                     } else if (response.data.err) {
-                        this.setState({ 
+                        this.setState({
                             errMsg: response.data.err,
                             succMsg: ""
                         });
@@ -58,7 +59,7 @@ var ProvidersApp = React.createClass({
                 }).catch(error => {
                     /** SI SALIO MAL, CAMBIO EL ESTADO DEL COMPONENTE ACTUALIZANDO EL MENSAJE DE FALLA */
                     console.error(error);
-                    this.setState({ 
+                    this.setState({
                         errMsg: error,
                         succMsg: ""
                     });
@@ -68,6 +69,46 @@ var ProvidersApp = React.createClass({
                 errMsg: "Ingresar todos los datos del proveedor",
                 succMsg: ""
             });
+        }
+    },
+
+    __filterProviders: function (providers, selectedProviders) {
+        return providers.filter(provider => selectedProviders[provider.id] ? false : true);
+    },
+
+    onDeleteProvidersClick: function () {
+        let selectedProviders = this.state.selectedProviders;
+        let providerIds = Object.keys(selectedProviders);
+
+        if (providerIds.length == 0) {
+            this.setState({
+                errMsg: "No se seleccionaron proveedores",
+                succMsg: ""
+            });
+        } else {
+            axios.post('/api/providers/delete', { providerIds: providerIds })
+                .then(response => {
+                    console.log(response);
+                    if (response.data.ok) {
+                        let providers = this.__filterProviders(this.state.providers, selectedProviders);
+                        this.setState({
+                            succMsg: response.data.ok,
+                            errMsg: "",
+                            providers: providers,
+                            selectedProviders: {}
+                        });
+                    } else if (response.data.err) {
+                        this.setState({
+                            succMsg: "",
+                            errMsg: response.data.err
+                        });
+                    }
+                }).catch(error => {
+                    this.setState({
+                        succMsg: "",
+                        errMsg: error
+                    });
+                });
         }
     },
 
@@ -103,6 +144,8 @@ var ProvidersApp = React.createClass({
                     onProviderNameChange={this.onProviderNameChange} />
 
                 <AddProviderButton onClick={this.onAddProviderClick} />
+
+                <DeleteProvidersButton onClick={this.onDeleteProvidersClick} />
 
                 <ProvidersTable
                     providers={this.state.providers}

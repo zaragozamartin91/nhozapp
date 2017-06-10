@@ -61,8 +61,6 @@ router.post('/providers/delete', function (req, res, next) {
       res.send({ ok: "Proveedores eliminados correctamente" });
     }
   });
-
-
 });
 
 router.post('/providers/update', function (req, res, next) {
