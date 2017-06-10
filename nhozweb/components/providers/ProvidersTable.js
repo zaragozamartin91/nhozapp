@@ -2,41 +2,38 @@ import React from 'react';
 import ProvidersTableRow from './ProvidersTableRow';
 
 var ProvidersTable = React.createClass({
-    getInitialState: function () {
-        return {
-            selectedProviders: []
-        }
-    },
-
     getDefaultProps: function () {
-        return { providers: [] };
+        return { 
+            providers: [],
+            selectedProviders: {}
+        };
     },
 
-    onRowClick: function (provider) {
+    onClick: function (provider) {
         console.log("onRowClick provider:");
         console.log(provider);
         
-        let selectedProviders = this.state.selectedProviders;
-        let selectedProviderIndex = selectedProviders.indexOf(provider.id);
-        if (selectedProviderIndex >= 0) {
-            selectedProviders.splice(selectedProviderIndex, 1);
+        let selectedProviders = this.props.selectedProviders;
+        if(selectedProviders[provider.id]) {
+            delete selectedProviders[provider.id];
         } else {
-            selectedProviders.push(provider.id);
+            selectedProviders[provider.id] = provider;
         }
+
         console.log('selectedProviders: ');
         console.log(selectedProviders);
 
-        this.setState({ selectedProviders: selectedProviders });
+        this.props.onRowClick(selectedProviders);
     },
 
     render: function () {
         let providers = this.props.providers;
 
         let providerRows = providers.map(provider => {
-            let isSelected = this.state.selectedProviders.indexOf(provider.id) >= 0;
+            let isSelected = this.props.selectedProviders[provider.id] ? true : false;
             return (<ProvidersTableRow
                 provider={provider}
-                onClick={this.onRowClick}
+                onClick={this.onClick}
                 selected={isSelected} />)
         });
 

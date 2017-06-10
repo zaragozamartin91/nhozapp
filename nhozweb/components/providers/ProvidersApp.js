@@ -13,7 +13,8 @@ var ProvidersApp = React.createClass({
             providerName: "",
             errMsg: "",
             succMsg: "",
-            providers: []
+            providers: [],
+            selectedProviders: {}
         }
     },
 
@@ -48,6 +49,10 @@ var ProvidersApp = React.createClass({
         });
     },
 
+    onRowClick: function(selectedProviders) {
+        this.setState({selectedProviders: selectedProviders});
+    },
+
     componentDidMount: function () {
         console.log("ProvidersApp did mount!");
         axios.get('/api/providers')
@@ -77,7 +82,10 @@ var ProvidersApp = React.createClass({
 
                 <AddProviderButton onClick={this.onAddProviderClick} />
 
-                <ProvidersTable providers={this.state.providers} />
+                <ProvidersTable 
+                    providers={this.state.providers}
+                    onRowClick={this.onRowClick}
+                    selectedProviders={this.state.selectedProviders} />
             </div>
         );
     }
