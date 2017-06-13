@@ -10,30 +10,32 @@ import ProvidersTable from './ProvidersTable';
 var ProvidersApp = React.createClass({
     getInitialState: function () {
         return {
-            providerId: "",
-            providerName: "",
             errMsg: "",
             succMsg: "",
             providers: [],
-            selectedProviders: {}
+            selectedProviders: {},
+            currProvider: {
+                id: "",
+                name: ""
+            }
         }
     },
 
     onProviderIdChange: function (pid) {
-        this.setState({ providerId: pid });
+        let provider = this.state.currProvider;
+        provider.id = pid;
+        this.setState({ currProvider: provider });
     },
 
     onProviderNameChange: function (pname) {
-        this.setState({ providerName: pname });
+        let provider = this.state.currProvider;
+        provider.name = pname;
+        this.setState({ currProvider: provider });
     },
 
     onAddProviderClick: function () {
-        console.log(`onAddProviderClick: ${this.state.providerId} ${this.state.providerName}`);
-
-        let newProvider = {
-            id: this.state.providerId,
-            name: this.state.providerName
-        };
+        let newProvider = this.state.currProvider;
+        console.log(`onAddProviderClick: ${newProvider.providerId} ${newProvider.providerName}`);
 
         if (newProvider.id && newProvider.name) {
             /* ENVIO UN POST PARA AGREGAR UN PROVEEDOR.
@@ -112,8 +114,21 @@ var ProvidersApp = React.createClass({
         }
     },
 
-    onRowClick: function (selectedProviders) {
-        this.setState({ selectedProviders: selectedProviders });
+    onRowClick: function (provider) {
+        console.log("onRowClick provider:");
+        console.log(provider);
+        
+        let selectedProviders = this.state.selectedProviders;
+        if(selectedProviders[provider.id]) {
+            delete selectedProviders[provider.id];
+        } else {
+            selectedProviders[provider.id] = provider;
+        }
+
+        console.log('selectedProviders: ');
+        console.log(selectedProviders);
+
+        this.setState({selectedProviders: selectedProviders});
     },
 
     componentDidMount: function () {
@@ -141,7 +156,8 @@ var ProvidersApp = React.createClass({
 
                 <ProviderForm
                     onProviderIdChange={this.onProviderIdChange}
-                    onProviderNameChange={this.onProviderNameChange} />
+                    onProviderNameChange={this.onProviderNameChange} 
+                    provider={this.state.currProvider} />
 
                 <AddProviderButton onClick={this.onAddProviderClick} />
 

@@ -10,20 +10,7 @@ var ProvidersTable = React.createClass({
     },
 
     onClick: function (provider) {
-        console.log("onRowClick provider:");
-        console.log(provider);
-        
-        let selectedProviders = this.props.selectedProviders;
-        if(selectedProviders[provider.id]) {
-            delete selectedProviders[provider.id];
-        } else {
-            selectedProviders[provider.id] = provider;
-        }
-
-        console.log('selectedProviders: ');
-        console.log(selectedProviders);
-
-        this.props.onRowClick(selectedProviders);
+        this.props.onRowClick(provider);
     },
 
     render: function () {
